@@ -1,4 +1,4 @@
-# MeuDelivery
+﻿# MeuDelivery
 
 Sistema para restaurantes de delivery venderem pelo **próprio canal, sem comissão por pedido**: cardápio digital, atendente virtual no WhatsApp, gestor de pedidos, entregadores, cupons, cashback e relatórios.
 
@@ -27,12 +27,12 @@ cd meudelivery/prototipo
 
 Depois abra o arquivo `index.html` no navegador.
 
-### Opção 3 — No celular
+### Opção 3 — Pelo link (computador ou celular)
 
-O jeito mais simples é abrir no computador e diminuir a janela: o layout se ajusta ao tamanho de celular.
+Abra direto no navegador, sem baixar nada:
+**https://damaziobr.github.io/meudelivery/**
 
-Para abrir direto no celular, o protótipo precisa estar publicado como site, por exemplo pelo **GitHub Pages**: em **Settings → Pages**, escolha a branch `main` e a pasta `/ (root)`. O endereço fica assim:
-`https://damaziobr.github.io/meudelivery/prototipo/`
+No celular, o layout se ajusta à tela. Para mostrar a um cliente, é só mandar esse link.
 
 ---
 
