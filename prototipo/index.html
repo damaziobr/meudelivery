@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MeuDelivery — Demonstração</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#ff5a1f;--brand-d:#e2460f;--brand-l:#fff1eb;--ink:#1b1d22;--muted:#6b7280;--line:#e6e7eb;--bg:#f4f5f7;--card:#fff;--ok:#16a34a;--ok-l:#e8f7ee;--warn:#c26a00;--warn-l:#fff4dc;--info:#2563eb;--info-l:#eaf1ff;--bad:#dc2626;--bad-l:#fdecec;--side:#15171c;--wa:#075e54;--wabg:#efe7de}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:var(--brand-d);cursor:pointer;font-weight:600;text-decoration:underline}
+h1,h2,h3,h4{letter-spacing:-.01em}
+.app{display:flex;min-height:100vh}
+.side{width:236px;background:var(--side);color:#cfd3dc;padding:18px 12px;position:sticky;top:0;height:100vh;overflow:auto;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:18px;padding:4px 8px 10px}
+.logo i{width:34px;height:34px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-style:normal;font-size:18px}
+.nav-g{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#7d8391;margin:16px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:9px 10px;border-radius:8px;text-align:left;color:#cfd3dc}
+.nav:hover{background:#22252c}
+.nav.on{background:var(--brand);color:#fff}
+.nav .bd{margin-left:auto;background:#ff3b30;color:#fff;border-radius:20px;font-size:11px;padding:1px 7px;font-weight:700}
+.nav.on .bd{background:#fff;color:var(--brand)}
+.side-foot{margin:22px 10px 0;font-size:11.5px;color:#6f7582;line-height:1.4}
+.main{flex:1;min-width:0;padding:24px 28px 60px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.top>div:first-child{margin-right:auto}
+.top h1{font-size:22px;margin:0}
+.sub{color:var(--muted);margin:3px 0 0;font-size:13px;line-height:1.45}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.h3{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;font-weight:600;white-space:nowrap;color:var(--ink)}
+.btn:hover{border-color:#c9ccd3}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.pri:hover{background:var(--brand-d)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.btn.ghost{background:transparent;color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:30px;padding:3px 9px;font-size:11.5px;font-weight:600;background:#eef0f3;color:#3b3f48;white-space:nowrap}
+.pill.ok{background:var(--ok-l);color:var(--ok)}.pill.warn{background:var(--warn-l);color:var(--warn)}.pill.info{background:var(--info-l);color:var(--info)}.pill.bad{background:var(--bad-l);color:var(--bad)}.pill.br{background:var(--brand-l);color:var(--brand-d)}
+.sw{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0}
+.sw input{display:none}
+.sw span{position:absolute;inset:0;background:#cfd3da;border-radius:20px;transition:.2s}
+.sw span:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+span{background:var(--ok)}
+.sw.warn input:checked+span{background:#f59e0b}
+.sw input:checked+span:before{transform:translateX(16px)}
+.tg{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 10px;cursor:pointer}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g2x{grid-template-columns:1.4fr 1fr}
+.row{display:flex;align-items:center}.sb{justify-content:space-between}.g8{gap:8px}.wrap{flex-wrap:wrap}.grow{flex:1}
+.mt{margin-top:14px}.mb{margin-bottom:16px}.m0{margin:0}.pad{padding:16px}.center{text-align:center}
+.muted{color:var(--muted)}.green{color:var(--ok)}.warn-t{color:var(--warn)}
+.kpi .l{color:var(--muted);font-size:12.5px;font-weight:500}
+.kpi .v{font-size:24px;font-weight:800;margin-top:4px}
+.kpi .d{font-size:12px;color:var(--ok);margin-top:2px;font-weight:600}
+.note{background:#f7f8fa;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:12px;line-height:1.45}
+.tip{background:var(--brand-l);border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:14px;line-height:1.45}
+.ck{padding-left:0;list-style:none;margin:0}
+.ck li{padding:6px 0 6px 26px;position:relative;line-height:1.45}
+.ck li:before{content:'✓';position:absolute;left:0;top:6px;width:18px;height:18px;border-radius:50%;background:var(--ok-l);color:var(--ok);font-size:11px;display:grid;place-items:center;font-weight:800}
+.code{font-family:ui-monospace,Consolas,monospace;background:#f1f2f5;border-radius:5px;padding:1px 6px;font-size:12.5px}
+.linkbox{font-family:ui-monospace,Consolas,monospace;background:#f1f2f5;border-radius:8px;padding:10px 12px;font-size:13px;word-break:break-all}
+.inp{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;outline:0}
+.inp:focus{border-color:var(--brand)}
+.lb{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:12px 0 5px}
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:560px}
+.tbl th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:10px;border-bottom:1px solid #f0f1f3;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.empty{color:#9aa0aa;font-size:12.5px;text-align:center;padding:20px 6px}
+/* início */
+.hero{background:linear-gradient(135deg,#1b1d22,#2b2118);color:#fff;border-radius:20px;padding:34px;display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:center;margin-bottom:26px}
+.hero h1{font-size:32px;line-height:1.15;margin:14px 0 12px}
+.hero h1 span{color:#ff8a5c}
+.hero p{color:#c9ccd3;font-size:15px;line-height:1.55;margin:0 0 20px}
+.hero .pill{background:#ffffff1a;color:#ffd2bf}
+.hs{display:grid;gap:10px}
+.hs div{background:#ffffff12;border:1px solid #ffffff1c;border-radius:14px;padding:14px 16px}
+.hs b{font-size:24px;display:block;color:#fff}
+.hs span{color:#bfc3cc;font-size:13px}
+.sec-t{font-size:18px;margin:6px 0 12px}
+.step{display:flex;gap:12px}
+.step i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+.step p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+.tile{cursor:pointer;transition:.15s}
+.tile:hover{border-color:var(--brand);transform:translateY(-2px)}
+.tile .e{font-size:28px}
+.tile b{display:block;margin:8px 0 4px;font-size:15px}
+.tile span{color:var(--muted);font-size:13px;line-height:1.45}
+.plan{position:relative}
+.plan.dest{border:2px solid var(--brand)}
+.plan .pr{font-size:28px;font-weight:800;margin:6px 0}
+.plan .pr small{font-size:13px;color:var(--muted);font-weight:500}
+/* kanban */
+.kb{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:#eceef2;border-radius:12px;padding:10px;min-height:420px}
+.col h3{font-size:13px;margin:2px 4px 10px;display:flex;justify-content:space-between;align-items:center}
+.col h3 span{background:#fff;border-radius:20px;padding:1px 8px;font-size:12px}
+.col-analise h3{color:var(--warn)}.col-preparo h3{color:var(--info)}.col-pronto h3{color:#7c3aed}.col-entrega h3{color:var(--brand-d)}.col-finalizado h3{color:var(--ok)}
+.oc{background:#fff;border-radius:10px;padding:11px 12px;margin-bottom:10px;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.04);cursor:pointer}
+.oc:hover{border-color:#cdd0d6}
+.oc.fresh{border-color:var(--brand);box-shadow:0 0 0 3px #ff5a1f33;animation:pop .5s}
+@keyframes pop{0%{transform:scale(.94);opacity:0}100%{transform:none;opacity:1}}
+.oc-h{display:flex;align-items:center;gap:6px}
+.oc-h .tm{margin-left:auto;font-size:11.5px;color:var(--muted)}
+.oc-h .tm.late{color:var(--bad);font-weight:700}
+.oc-n{font-weight:600;margin-top:6px}
+.oc-i{color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.4}
+.oc-m{font-size:12px;margin-top:5px;color:var(--brand-d);font-weight:600}
+.oc-f{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px}
+.oc-f span{color:var(--muted);text-align:right;max-width:60%}
+.oc-a{display:flex;gap:6px;margin-top:10px}
+.oc-a .btn{flex:1}
+.col-finalizado .oc{opacity:.75}
+/* celular */
+.phone-wrap{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+.phone{width:370px;max-width:100%;height:760px;background:#111;border-radius:46px;padding:11px;box-shadow:0 24px 60px rgba(0,0,0,.2);flex-shrink:0}
+.screen{background:#fff;border-radius:36px;height:100%;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.scroll{flex:1;overflow:auto;position:relative}
+.explain{flex:1;min-width:280px;max-width:520px}
+/* cardápio */
+.cv-hero{height:118px;background:linear-gradient(135deg,#ff8a3d,#e8331f);position:relative;flex-shrink:0}
+.cv-hero:after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,#ffffff40,transparent 50%)}
+.cv-logo{position:absolute;left:16px;bottom:-30px;width:66px;height:66px;border-radius:18px;background:#fff;display:grid;place-items:center;font-size:36px;box-shadow:0 6px 16px rgba(0,0,0,.15);z-index:1}
+.cv-info{padding:38px 16px 8px}
+.cv-info h2{margin:0 0 6px;font-size:20px}
+.cv-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+.cv-cb{background:#fff7e6;color:#8a5a00;border-radius:10px;padding:8px 10px;font-size:12.5px;margin-top:6px}
+.cv-closed{margin:6px 16px;background:var(--bad-l);color:var(--bad);border-radius:10px;padding:10px;font-size:12.5px;font-weight:600}
+.bn{display:flex;gap:10px;overflow-x:auto;padding:8px 16px 6px;scrollbar-width:none}
+.bn div{min-width:240px;height:92px;border-radius:14px;padding:12px 14px;color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.bn div span{position:absolute;right:10px;top:4px;font-size:46px;opacity:.9}
+.bn b{font-size:16px}.bn small{opacity:.9}
+.cv-cat{font-weight:800;font-size:15px;padding:16px 16px 4px}
+.dest{display:flex;gap:10px;overflow-x:auto;padding:6px 16px 4px;scrollbar-width:none}
+.dc{min-width:128px;cursor:pointer}
+.dc .im{height:96px;border-radius:12px;display:grid;place-items:center;font-size:44px}
+.dc b{display:block;font-size:12.5px;margin-top:6px}
+.dc span{font-size:12.5px;font-weight:700}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;position:sticky;top:0;background:#fff;z-index:3;border-bottom:1px solid var(--line);margin-top:8px;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 12px;font-size:12.5px;font-weight:600}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pi{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid #f0f1f3;cursor:pointer}
+.pi:hover{background:#fafafa}
+.pi .tx{flex:1;min-width:0}
+.pi .im{width:82px;height:82px;border-radius:12px;display:grid;place-items:center;font-size:40px;flex-shrink:0}
+.pi h4{margin:0 0 3px;font-size:14px}
+.pi p{margin:0;color:var(--muted);font-size:12px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pi.off{opacity:.5;cursor:default}
+.price{font-weight:700;margin-top:6px;font-size:13.5px}
+.de{color:var(--muted);text-decoration:line-through;font-weight:400;font-size:12px;margin-right:5px}
+.bag{position:absolute;left:12px;right:12px;bottom:14px;background:var(--brand);color:#fff;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;font-weight:700;border:0;box-shadow:0 8px 20px #ff5a1f55;z-index:5}
+.pd-im{height:210px;display:grid;place-items:center;font-size:96px;position:relative}
+.back{position:absolute;left:14px;top:14px;width:36px;height:36px;border-radius:50%;border:0;background:#fff;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pd-n{margin:0 0 6px;font-size:20px}
+.big2{font-size:22px;font-weight:800;margin:8px 0}
+.pd-sec{font-weight:700;margin:18px 0 8px;font-size:13.5px}
+.pd-sec small{font-weight:500;color:var(--muted);margin-left:6px}
+.opt{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:11px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:7px;cursor:pointer;font-size:13px}
+.opt span:first-child{flex:1}
+.opt input{accent-color:var(--brand);width:18px;height:18px}
+.opt.pay small{display:block;color:var(--muted);font-weight:400;font-size:11.5px}
+.opt.pay.on{border-color:var(--brand);background:var(--brand-l)}
+.pd-foot{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 14px 18px;display:flex;gap:10px;align-items:center;z-index:5}
+.pd-foot .btn{padding:12px}
+.qty{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:4px 6px}
+.qty button{width:28px;height:28px;border:0;background:#f3f4f6;border-radius:8px;font-size:16px;font-weight:700;color:var(--brand-d)}
+.qty.sm{padding:2px 4px;gap:6px}.qty.sm button{width:22px;height:22px;font-size:13px}
+.cv-top{display:flex;align-items:center;justify-content:space-between;padding:18px 14px 12px;border-bottom:1px solid var(--line);flex-shrink:0}
+.back2{border:0;background:#f3f4f6;width:34px;height:34px;border-radius:50%;font-size:16px}
+.cv-top span{width:34px}
+.cl{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0f1f3}
+.cl small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.cl-r{display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-weight:600}
+.lnk{border:0;background:none;color:var(--brand-d);font-weight:700;padding:10px 0;font-size:13px}
+.seg2{display:flex;background:#f3f4f6;border-radius:10px;padding:4px;gap:4px}
+.seg2 button{flex:1;border:0;background:none;border-radius:8px;padding:8px;font-weight:600;font-size:12.5px}
+.seg2 button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.cup-ok{background:var(--ok-l);color:var(--ok);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:13px}
+.cup-ok .lnk{margin-left:auto;color:var(--ok);padding:4px 0}
+.cup-err{background:var(--bad-l);color:var(--bad);border-radius:10px;padding:8px 12px;font-size:12.5px;margin-top:6px}
+.resumo{background:#f7f8fa;border-radius:12px;padding:12px 14px;margin-top:16px;font-size:13px}
+.resumo>div{display:flex;justify-content:space-between;padding:3px 0;gap:10px}
+.resumo .tot{font-weight:800;font-size:15px;border-top:1px dashed #d8dbe0;margin-top:6px;padding-top:8px}
+.cbk{color:#8a5a00;font-size:12px;margin-top:4px}
+.qr{display:inline-block;padding:12px;border:1px solid var(--line);border-radius:14px;margin:10px 0}
+.pix-code{font-family:ui-monospace,Consolas,monospace;font-size:10.5px;background:#f3f4f6;border-radius:8px;padding:8px;word-break:break-all;text-align:left;color:#555}
+.sm2{font-size:12px;margin-top:10px}
+.ac-eta{background:var(--brand-l);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.ac-eta small{display:block;color:var(--muted)}
+.ac-eta b{font-size:20px}
+.tl-i{display:flex;gap:12px;position:relative;padding-bottom:16px}
+.tl-i i{width:16px;height:16px;border-radius:50%;background:#e3e5e9;flex-shrink:0;margin-top:2px;position:relative;z-index:1}
+.tl-i:not(:last-child):before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:2px;background:#e3e5e9}
+.tl-i.done i,.tl-i.cur i{background:var(--ok)}
+.tl-i.done:before{background:var(--ok)!important}
+.tl-i.cur i{box-shadow:0 0 0 5px #16a34a2e}
+.tl-i b{display:block;font-size:13.5px}
+.tl-i small{color:var(--muted);font-size:12px}
+.tl-i:not(.done):not(.cur){opacity:.5}
+/* whatsapp */
+.wa-h{background:var(--wa);color:#fff;padding:22px 12px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.wa-h small{display:block;opacity:.8;font-size:11.5px}
+.wa-av{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:20px;flex-shrink:0;color:var(--ink);font-weight:700}
+.wa-b{flex:1;overflow:auto;background:var(--wabg);padding:12px 10px;background-image:radial-gradient(#e0d5c7 1px,transparent 1px);background-size:14px 14px}
+.msg{max-width:84%;width:fit-content;padding:6px 9px 17px;border-radius:9px;margin:5px 0;position:relative;font-size:13.3px;line-height:1.4;box-shadow:0 1px 1px rgba(0,0,0,.08);overflow-wrap:anywhere;min-width:84px}
+.msg.in{background:#fff;border-top-left-radius:2px}
+.msg.out{background:#d9fdd3;margin-left:auto;border-top-right-radius:2px}
+.msg .t{position:absolute;right:8px;bottom:3px;font-size:10px;color:#7a8a80}
+.msg .tk{color:#53bdeb}
+.msg .who{font-size:11px;font-weight:700;color:var(--brand-d);margin-bottom:2px}
+.msg.typing{display:flex;gap:4px;padding:12px 14px;min-width:0}
+.msg.typing i{width:7px;height:7px;border-radius:50%;background:#9aa5a0;animation:bl 1s infinite}
+.msg.typing i:nth-child(2){animation-delay:.2s}.msg.typing i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+.sys{text-align:center;margin:8px auto;background:#fff5c4;color:#5b5020;font-size:11.5px;border-radius:8px;padding:4px 10px;width:fit-content;max-width:90%}
+.wa-pix{background:#f0f2f5;border-radius:8px;padding:8px;margin-bottom:6px}
+.wa-pix code{display:block;font-size:10.5px;word-break:break-all;margin:4px 0;color:#555}
+.wa-pix small{color:var(--wa);font-weight:700}
+.wa-img{width:170px;height:120px;border-radius:8px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);display:grid;place-items:center;font-size:40px;text-align:center}
+.wa-img span{display:block;font-size:11.5px;color:#2e7d32;font-weight:600}
+.wa-q{display:flex;gap:6px;overflow-x:auto;padding:6px 8px;background:var(--wabg);scrollbar-width:none;flex-shrink:0}
+.wa-q button{white-space:nowrap;border:1px solid #c8d9d1;background:#fff;border-radius:16px;padding:5px 11px;font-size:12px;color:var(--wa);font-weight:600}
+.wa-in{display:flex;gap:8px;padding:8px 8px 16px;background:#f0f0f0;align-items:center;flex-shrink:0}
+.wa-in input{flex:1;border:0;border-radius:20px;padding:10px 14px;outline:0;min-width:0}
+.wa-send{width:40px;height:40px;border-radius:50%;background:var(--wa);color:#fff;border:0;flex-shrink:0}
+/* atendimento */
+.at{display:grid;grid-template-columns:310px 1fr;gap:16px;height:calc(100vh - 140px);min-height:540px}
+.at-l{padding:0;overflow:auto}
+.at-s{padding:12px;border-bottom:1px solid var(--line)}
+.at-i{display:flex;gap:10px;padding:12px;border-bottom:1px solid #f0f1f3;cursor:pointer;align-items:center}
+.at-i:hover{background:#fafafa}
+.at-i.on{background:var(--brand-l)}
+.at-i .wa-av{background:#eef0f3}
+.at-i .grow{min-width:0}
+.at-p{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.at-c{padding:0;display:flex;flex-direction:column;overflow:hidden}
+.at-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.at-h .wa-av{background:#eef0f3}
+.at-h small{display:block;color:var(--muted)}
+.at-lock{padding:14px;text-align:center;color:var(--muted);font-size:13px;background:#fafafa;border-top:1px solid var(--line)}
+/* motoboy */
+.mo-h{background:linear-gradient(135deg,#ff7a3d,#e8331f);color:#fff;padding:28px 16px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.mo-h small{display:block;opacity:.85}
+.mo-h b{font-size:20px}
+.mo-earn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px}
+.mo-earn div{background:#f7f8fa;border-radius:12px;padding:10px}
+.mo-earn small{display:block;color:var(--muted);font-size:11px}
+.mo-earn b{font-size:15px}
+.mo-t{margin:10px 16px 8px;font-size:14px}
+.mo-c{margin:0 14px 10px;border:1px solid var(--line);border-radius:14px;padding:12px}
+.mo-a{margin:8px 0;font-size:13px}
+.mo-p{margin-bottom:10px}
+.mo-c .btn{flex:1;padding:8px 4px}
+.mo-empty{margin:0 14px;border:2px dashed var(--line);border-radius:14px;padding:24px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
+.mo-l{display:flex;justify-content:space-between;padding:9px 16px;border-bottom:1px solid #f0f1f3;font-size:13px}
+.map{width:100%;height:auto;border-radius:12px;display:block}
+/* marketing / relatórios */
+.segs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.seg{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left}
+.seg.on{border-color:var(--brand);background:var(--brand-l)}
+.seg b{display:block}.seg span{display:block;font-size:20px;font-weight:800;margin:4px 0}.seg small{color:var(--muted);font-size:12px}
+.wa-prev{background:var(--wabg);border-radius:12px;padding:14px;min-height:170px;background-image:radial-gradient(#e0d5c7 1px,transparent 1px);background-size:14px 14px}
+.big{font-size:36px;font-weight:800;color:var(--brand)}
+.rng{width:100%;accent-color:var(--brand)}
+.per{display:flex;gap:6px}
+.bars text{font-size:11px;fill:#8a909a}
+.fun{display:grid;gap:8px}
+.fun div{display:grid;grid-template-columns:140px 1fr 60px;align-items:center;gap:10px;font-size:13px}
+.fun i{display:block;height:22px;border-radius:6px;background:linear-gradient(90deg,#ff5a1f,#ff9a6c)}
+.leg{display:grid;gap:8px;font-size:13px}
+.leg div{display:flex;align-items:center;gap:8px}
+.leg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.leg b{margin-left:auto}
+.ia{background:linear-gradient(135deg,#1b1d22,#2d2440);color:#fff;border:0}
+.ia p{color:#d4d6dd;line-height:1.5;margin:6px 0 12px}
+.fb{border-bottom:1px solid #f0f1f3;padding:10px 0}
+.fb:last-child{border:0}
+.fb small{color:var(--muted)}
+.star{border:0;background:none;font-size:18px;opacity:.25}
+.star.on{opacity:1}
+.bn-ed{display:flex;gap:12px;overflow-x:auto}
+.bn-ed>div{min-width:220px;height:90px;border-radius:12px;color:#fff;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
+.bn-ed>div span{position:absolute;right:10px;top:4px;font-size:40px}
+.bn-add{background:#fff!important;color:var(--brand-d)!important;border:2px dashed #ffc2a8;justify-content:center!important;align-items:center;font-weight:700;cursor:pointer}
+.emo{display:flex;gap:6px;flex-wrap:wrap}
+.emo button{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:#fff;font-size:20px}
+.emo button.on{border-color:var(--brand);background:var(--brand-l)}
+.pim{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:24px}
+.pin{width:96px}
+/* modal / toast */
+.modal-bg{position:fixed;inset:0;background:rgba(15,17,22,.5);display:grid;place-items:center;z-index:50;padding:16px}
+.hidden{display:none}
+.modal{background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:22px;animation:pop .2s}
+.x{border:0;background:#f3f4f6;width:32px;height:32px;border-radius:50%}
+.md-sec{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;line-height:1.6}
+.md-sec .row{padding:3px 0;gap:10px}
+.rcpt{font-family:"Courier New",monospace;background:#fffef6;border:1px dashed #cfcfcf;padding:16px;font-size:12.5px;white-space:pre;line-height:1.45;overflow-x:auto;margin:12px 0}
+#toasts{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:60;align-items:flex-end}
+.toast{background:#1b1d22;color:#fff;padding:11px 15px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:340px;font-size:13px;animation:sl .3s;transition:.3s}
+.toast.out{opacity:0;transform:translateY(8px)}
+@keyframes sl{from{opacity:0;transform:translateY(10px)}}
+@media(max-width:1000px){.g2x{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.at{grid-template-columns:1fr;height:auto}.at-l{max-height:260px}.at-c{height:600px}}
+@media(max-width:900px){
+ .app{flex-direction:column}
+ .side{width:100%;height:auto;position:sticky;top:0;z-index:20;display:flex;gap:4px;overflow-x:auto;padding:8px;scrollbar-width:none}
+ .nav-g,.side-foot,.logo span{display:none}
+ .logo{padding:0 6px 0 2px}
+ .nav{width:auto;flex-shrink:0;white-space:nowrap;padding:8px 10px}
+ .main{padding:16px}
+ .hero{padding:22px}.hero h1{font-size:25px}
+ .kb{grid-template-columns:repeat(5,250px)}
+ .fun div{grid-template-columns:110px 1fr 50px}
+}
+@media(max-width:430px){.phone{height:690px;border-radius:34px;padding:7px}.screen{border-radius:28px}.explain{min-width:0}#toasts{left:12px;right:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side"></aside>
+  <main class="main" id="main"></main>
+</div>
+<div id="modal" class="modal-bg hidden" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal-box"></div></div>
+<div id="toasts"></div>
+
+<script>
+/* ============ utilidades ============ */
+const $=s=>document.querySelector(s);
+const brl=v=>'R$ '+(Math.round(v*100)/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const hora=ts=>new Date(ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const minAgo=ts=>Math.max(0,Math.round((Date.now()-ts)/60000));
+const fmtTxt=s=>esc(s).replace(/\*([^*\n]+)\*/g,'<b>$1</b>').replace(/~([^~\n]+)~/g,'<s>$1</s>').replace(/\n/g,'<br>');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ============ dados fictícios ============ */
+const LOJA={nome:'Burger da Vila',link:'burgerdavila.meudelivery.com.br',taxa:7,minimo:25,tempo:'35–45 min'};
+const DEMO_TEL='(11) 90000-0001';
+const CATS=['Burgers','Combos','Porções','Bebidas','Sobremesas'];
+let P=[
+ {id:1,cat:'Burgers',nome:'X-Burger Clássico',desc:'Pão brioche, blend de 150 g, queijo prato e molho da casa.',preco:24.9,custo:9.2,emoji:'🍔',cor:'#ffe1bf',add:true,alias:['x-burger','xburger','x burger','classico']},
+ {id:2,cat:'Burgers',nome:'X-Bacon',desc:'Blend de 150 g, cheddar, bacon crocante e cebola caramelizada.',preco:29.9,custo:11.4,emoji:'🥓',cor:'#ffd3c4',dest:true,add:true,alias:['x-bacon','xbacon','x bacon']},
+ {id:3,cat:'Burgers',nome:'X-Salada',desc:'Blend de 150 g, queijo, alface, tomate e maionese verde.',preco:26.9,custo:9.9,emoji:'🥬',cor:'#dff3d8',add:true,alias:['x-salada','xsalada','x salada','salada']},
+ {id:4,cat:'Burgers',nome:'Smash Duplo',desc:'Dois smash de 90 g, queijo americano em dobro e picles.',preco:34.9,custo:12.8,emoji:'🍔',cor:'#ffd9a8',dest:true,add:true,alias:['smash']},
+ {id:5,cat:'Burgers',nome:'Veggie da Vila',desc:'Hambúrguer de grão-de-bico, rúcula, tomate e maionese de ervas.',preco:31.9,custo:10.5,emoji:'🌱',cor:'#e3f5d0',add:true,alias:['veggie','vegetariano','vegano']},
+ {id:6,cat:'Combos',nome:'Combo Vila',desc:'Smash Duplo + batata rústica + refrigerante lata.',preco:45.9,de:52.9,custo:17,emoji:'🍟',cor:'#ffe6b3',dest:true,alias:['combo vila','combo']},
+ {id:7,cat:'Combos',nome:'Combo Casal',desc:'2 X-Bacon + batata rústica grande + 2 refrigerantes.',preco:89.9,de:99.9,custo:33,emoji:'💑',cor:'#ffd6e0',alias:['combo casal','casal']},
+ {id:8,cat:'Porções',nome:'Batata Rústica',desc:'400 g com alecrim e páprica defumada.',preco:18.9,custo:5.1,emoji:'🍟',cor:'#fff0b8',alias:['batata','fritas']},
+ {id:9,cat:'Porções',nome:'Onion Rings',desc:'12 anéis de cebola empanados e crocantes.',preco:21.9,custo:6.3,emoji:'🧅',cor:'#f3e6d6',alias:['onion','cebola','aneis']},
+ {id:10,cat:'Porções',nome:'Nuggets',desc:'10 unidades com molho barbecue.',preco:19.9,custo:6.8,emoji:'🍗',cor:'#ffe8cc',alias:['nugget']},
+ {id:11,cat:'Bebidas',nome:'Coca-Cola lata',desc:'350 ml, geladinha.',preco:6.5,custo:3.2,emoji:'🥤',cor:'#ffd6d6',alias:['coca','refri','refrigerante']},
+ {id:12,cat:'Bebidas',nome:'Suco Natural',desc:'500 ml — laranja, limão ou maracujá.',preco:9.9,custo:3,emoji:'🧃',cor:'#fff1c2',alias:['suco']},
+ {id:13,cat:'Bebidas',nome:'Água Mineral',desc:'500 ml, com ou sem gás.',preco:4,custo:1.2,emoji:'💧',cor:'#dbeeff',alias:['agua']},
+ {id:14,cat:'Sobremesas',nome:'Brownie com Sorvete',desc:'Brownie quentinho com uma bola de sorvete de creme.',preco:16.9,custo:5.2,emoji:'🍫',cor:'#ead9cc',alias:['brownie','sobremesa']},
+ {id:15,cat:'Sobremesas',nome:'Milkshake de Ovomaltine',desc:'400 ml, bem cremoso.',preco:19.9,custo:6.1,emoji:'🥛',cor:'#efe4d8',falta:true,alias:['milkshake','shake']},
+].map(p=>({ativo:true,falta:false,dest:false,add:false,...p}));
+const ADDS=[{n:'Bacon extra',p:4},{n:'Cheddar extra',p:3},{n:'Ovo',p:2.5},{n:'Sem cebola',p:0}];
+const BANNERS=[
+ {t:'Combo Vila',s:'de R$ 52,90 por R$ 45,90',bg:'linear-gradient(135deg,#ff8a3d,#e8331f)',e:'🍟'},
+ {t:'Quarta do cashback',s:'cashback em dobro toda quarta',bg:'linear-gradient(135deg,#7c3aed,#c026d3)',e:'💰'},
+ {t:'Frete grátis',s:'acima de R$ 40 com FRETE0',bg:'linear-gradient(135deg,#059669,#10b981)',e:'🛵'}];
+let CUP=[
+ {cod:'VOLTA10',tipo:'pct',val:10,min:0,regra:'Clientes sumidos há 30+ dias',usos:38,conv:22,ativo:true},
+ {cod:'FRETE0',tipo:'frete',val:0,min:40,regra:'Pedidos acima de R$ 40',usos:121,conv:31,ativo:true},
+ {cod:'BEMVINDO',tipo:'fixo',val:10,min:40,regra:'1º pedido no canal próprio',usos:57,conv:44,ativo:true},
+ {cod:'QUARTOU',tipo:'pct',val:15,min:0,regra:'Só às quartas-feiras',usos:12,conv:18,ativo:false}];
+const MOTOS=[
+ {id:1,nome:'João Pedro',veic:'Honda CG • QWE-2B31',status:'rota',hoje:9,taxa:6},
+ {id:2,nome:'Marcos Vinícius',veic:'Yamaha Factor • RTA-4C10',status:'disponivel',hoje:7,taxa:6},
+ {id:3,nome:'Pedro Henrique',veic:'Honda Biz • HJK-8D22',status:'folga',hoje:0,taxa:6}].map(m=>({...m,aPagar:m.hoje*m.taxa}));
+const moto=id=>MOTOS.find(m=>m.id===id);
+const ENDS=['Rua das Palmeiras, 245 – Centro','Av. Goiás, 1.380 – Jardim América','Rua 7, 88 – Vila Nova','Rua dos Ipês, 410 – Setor Sul','Al. das Flores, 12 – Parque das Águas','Rua Tiradentes, 902 – Centro','Rua Paraná, 57 – Vila Rocha','Rua 15 de Novembro, 330 – Setor Oeste'];
+const NOMES=['Bruno Carvalho','Larissa Rocha','Diego Martins','Camila Duarte','Thiago Nunes','Aline Barros','Felipe Costa','Renata Lopes','Vinícius Teixeira','Mariana Freitas'];
+const SEGS=[
+ {n:'Sumiram há 30+ dias',q:64,d:'Pediam sempre e pararam',msg:'Oi, {nome}! Faz tempo que você não aparece por aqui 🥺\n\nPreparamos um presente: *10% OFF* no próximo pedido com o cupom *VOLTA10* 🍔\n\nPeça pelo link: burgerdavila.meudelivery.com.br'},
+ {n:'Pedem toda semana',q:112,d:'Seus clientes mais fiéis',msg:'{nome}, você é de casa! 🧡\n\nEssa semana tem lançamento: *Smash Duplo com bacon caramelizado*. Quer provar primeiro? Responda *EU QUERO* que separamos o seu.'},
+ {n:'Só no fim de semana',q:87,d:'Nunca pediram de terça a quinta',msg:'{nome}, que tal um burger no meio da semana? 😋\n\nToda *quarta* tem *cashback em dobro* no Burger da Vila 💰\n\nburgerdavila.meudelivery.com.br'},
+ {n:'Aniversariantes do mês',q:19,d:'Fazem aniversário em novembro',msg:'Parabéns, {nome}! 🎉\n\nNo seu mês de aniversário o *Brownie com Sorvete* é por nossa conta em qualquer pedido. É só pedir pelo link 🎂'}];
+let CAMP=[
+ {n:'Volta pra Vila',seg:'Sumiram há 30+ dias',env:58,ped:14,fat:812.4,st:'Enviada',data:'15/11'},
+ {n:'Quarta do cashback',seg:'Só no fim de semana',env:80,ped:11,fat:603.9,st:'Enviada',data:'12/11'},
+ {n:'Lançamento Veggie',seg:'Pedem toda semana',env:104,ped:23,fat:1288.7,st:'Enviada',data:'08/11'}];
+const FIEIS=[['Carla Mendes',27,1482.3],['Rafael Souza',22,1190],['Ana Beatriz',19,964.5],['Gustavo Ribeiro',15,811.2],['Juliana Prado',12,598.8]];
+
+/* ============ pedidos ============ */
+let SEQ=1031;
+const O=[];
+const it=(id,q,obs)=>{const p=P.find(x=>x.id===id);return{pid:id,nome:p.nome,qtd:q,preco:p.preco,obs:obs||''}};
+function novoPedido(d){const o={id:SEQ++,created:Date.now()-(d.min||0)*60000,status:'analise',moto:null,taxa:LOJA.taxa,desc:0,tel:'(11) 9'+Math.floor(1000+Math.random()*8999)+'-'+Math.floor(1000+Math.random()*8999),...d};
+ o.sub=o.itens.reduce((a,i)=>a+i.preco*i.qtd,0);o.total=Math.max(0,o.sub+o.taxa-o.desc);O.push(o);return o}
+novoPedido({cliente:'Ana Beatriz',end:ENDS[1],itens:[it(4,1),it(11,1)],pag:'Pix (pago)',origem:'Cardápio',status:'finalizado',moto:1,min:95});
+novoPedido({cliente:'Lucas Ferreira',end:ENDS[2],itens:[it(6,2)],pag:'Pago no iFood',origem:'iFood',status:'finalizado',moto:2,min:80});
+novoPedido({cliente:'Rafael Souza',end:ENDS[3],itens:[it(2,2),it(8,1),it(11,2)],pag:'Dinheiro — troco p/ R$ 100',origem:'WhatsApp',status:'entrega',moto:1,min:38,chat:'c4'});
+novoPedido({cliente:'Fernanda Alves',end:ENDS[4],itens:[it(7,1)],pag:'Cartão (pago)',origem:'Cardápio',status:'pronto',min:26});
+novoPedido({cliente:'Gustavo Ribeiro',end:ENDS[5],itens:[it(1,1,'sem cebola'),it(9,1)],pag:'Pix (pago)',origem:'Cardápio',status:'preparo',min:14});
+novoPedido({cliente:'Patrícia Gomes',end:ENDS[6],itens:[it(5,1),it(12,1)],pag:'Pago no iFood',origem:'iFood',status:'preparo',min:9});
+novoPedido({cliente:'Seu Antônio',end:'Retirada no balcão',itens:[it(10,1),it(13,2)],pag:'Pago no balcão',origem:'Balcão',status:'preparo',taxa:0,min:6});
+const pJu=novoPedido({cliente:'Juliana Prado',end:ENDS[1],itens:[it(3,1),it(14,1)],pag:'Maquininha na entrega',origem:'WhatsApp',status:'analise',min:2,chat:'c2'});
+
+/* ============ conversas ============ */
+const tm=m=>hora(Date.now()-m*60000);
+const CH=[
+ {id:'demo',nome:'Carla Mendes',tel:DEMO_TEL,demo:true,humano:false,msgs:[],bot:{st:'inicio',itens:[],end:ENDS[0]}},
+ {id:'c2',nome:'Juliana Prado',tel:'(11) 98123-4410',humano:false,bot:{st:'feito'},msgs:[
+  {de:'cli',txt:'Boa noite! Vcs entregam no Jardim América?',t:tm(5)},
+  {de:'bot',txt:'Boa noite, Juliana! 😊 Entregamos sim! Taxa de *R$ 7,00* e tempo de *35–45 min*.\n\nQuer que eu já anote seu pedido?',t:tm(5)},
+  {de:'cli',txt:'Quero um x-salada e um brownie',t:tm(4)},
+  {de:'bot',txt:'Anotado! ✅\n• 1x X-Salada — R$ 26,90\n• 1x Brownie com Sorvete — R$ 16,90\n\nMais alguma coisa?',t:tm(4)},
+  {de:'cli',txt:'só isso, passa cartão na entrega',t:tm(3)},
+  {de:'bot',txt:`Pedido *#${pJu.id}* confirmado! ✅\nTotal: *${brl(pJu.total)}* • maquininha na entrega.\n\nJá enviei para a cozinha 👨‍🍳`,t:tm(2)}]},
+ {id:'c3',nome:'Marcos Lima',tel:'(11) 97781-0932',humano:true,unread:true,bot:{st:'feito'},msgs:[
+  {de:'cli',txt:'Meu pedido veio sem a coca 😕',t:tm(21)},
+  {de:'bot',txt:'Poxa, Marcos, sinto muito! 😔 Vou chamar alguém da equipe pra resolver agora mesmo.',t:tm(21)},
+  {de:'sys',txt:'Conversa transferida para a equipe',t:tm(21)},
+  {de:'loja',txt:'Oi, Marcos! Aqui é a Bruna, do Burger da Vila. Já mandamos a coca com o motoboy e deixamos um cupom de R$ 10 para o próximo pedido 🧡',t:tm(18)},
+  {de:'cli',txt:'Show, obrigado pela atenção!',t:tm(1)}]},
+ {id:'c4',nome:'Rafael Souza',tel:'(11) 99652-1187',humano:false,bot:{st:'feito'},msgs:[
+  {de:'cli',txt:'2 x bacon, uma batata e 2 coca',t:tm(40)},
+  {de:'bot',txt:'Anotado! ✅\n• 2x X-Bacon — R$ 59,80\n• 1x Batata Rústica — R$ 18,90\n• 2x Coca-Cola lata — R$ 13,00\n\nEntrego no mesmo endereço do último pedido? 📍 *Rua dos Ipês, 410*',t:tm(40)},
+  {de:'cli',txt:'isso, dinheiro, troco pra 100',t:tm(39)},
+  {de:'bot',txt:'Fechado! Pedido confirmado ✅ Já está na cozinha 👨‍🍳',t:tm(39)},
+  {de:'bot',txt:'🛵 Seu pedido saiu para entrega com *João Pedro*!',t:tm(12)},
+  {de:'cli',txt:'Cadê meu pedido?',t:tm(3)},
+  {de:'bot',txt:'Ele já está a caminho com o João Pedro 🛵 Deve chegar em uns *5 minutos*!',t:tm(3)}]}];
+
+/* ============ estado da tela ============ */
+const S={view:'inicio',cfg:{aberta:true,alta:false,cashback:5,quartaDobro:true,sim:false},
+ cart:[],cm:{tela:'menu',cat:'Todos',pid:null,qtd:1,adds:[],obs:'',cupomAp:null,pag:'pix',tipo:'entrega',troco:'',end:ENDS[0]},
+ track:null,atSel:'demo',motoSel:1,mkSeg:0,relPer:'7'};
+const RESET={};
+
+/* ============ estrutura ============ */
+const NAV=[['Apresentação',[['inicio','🏠','Início']]],
+ ['Cliente',[['cardapio','📱','Cardápio digital'],['whats','💬','WhatsApp do cliente']]],
+ ['Restaurante',[['pedidos','🧾','Pedidos'],['atend','🤖','Atendimento'],['editor','📋','Editar cardápio'],['entregas','🛵','Entregas'],['marketing','🎯','Marketing'],['relatorios','📊','Relatórios']]],
+ ['Entregador',[['moto','🏍️','App do motoboy']]]];
+function renderSide(){
+ const nAn=O.filter(o=>o.status==='analise').length,nCh=CH.filter(c=>c.unread).length;
+ $('#side').innerHTML=`<div class="logo"><i>🛵</i><span>MeuDelivery</span></div>`+NAV.map(([g,items])=>`<div class="nav-g">${g}</div>`+items.map(([id,ic,lb])=>{
+  const bd=id==='pedidos'&&nAn?nAn:id==='atend'&&nCh?nCh:'';
+  return `<button class="nav ${S.view===id?'on':''}" onclick="go('${id}')"><span>${ic}</span>${lb}${bd?`<span class="bd">${bd}</span>`:''}</button>`}).join('')).join('')
+ +`<div class="side-foot">Protótipo visual (nome provisório).<br>Todos os dados são fictícios.</div>`}
+function go(v){S.view=v;RESET.cv=true;render();window.scrollTo(0,0)}
+function render(){
+ renderSide();
+ const keep={};document.querySelectorAll('[data-keep]').forEach(e=>keep[e.dataset.keep]=e.scrollTop);
+ const V={inicio:vInicio,cardapio:vCardapio,whats:vWhats,pedidos:vPedidos,atend:vAtend,editor:vEditor,entregas:vEntregas,marketing:vMarketing,relatorios:vRel,moto:vMoto};
+ $('#main').innerHTML=V[S.view]();
+ document.querySelectorAll('[data-keep]').forEach(e=>{const k=e.dataset.keep;if(!RESET[k]&&keep[k]!=null)e.scrollTop=keep[k];delete RESET[k]});
+ ['#wa-msgs','#at-msgs'].forEach(s=>{const e=$(s);if(e)e.scrollTop=e.scrollHeight});
+}
+const cab=(t,s,a='')=>`<div class="top"><div><h1>${t}</h1><p class="sub">${s}</p></div>${a}</div>`;
+const kpi=(l,v,d='')=>`<div class="card kpi"><div class="l">${l}</div><div class="v">${v}</div>${d?`<div class="d">${d}</div>`:''}</div>`;
+const phone=(inner,cls='')=>`<div class="phone ${cls}"><div class="screen">${inner}</div></div>`;
+function srcPill(o){const c={'Cardápio':'br','WhatsApp':'ok','iFood':'bad'}[o]||'';return `<span class="pill ${c}">${o}</span>`}
+function openModal(h){$('#modal-box').innerHTML=h;$('#modal').classList.remove('hidden')}
+function closeModal(){$('#modal').classList.add('hidden')}
+function toast(msg,act){const d=document.createElement('div');d.className='toast';d.textContent=msg;if(act==='go'){d.style.cursor='pointer';d.onclick=()=>go('pedidos')}
+ $('#toasts').appendChild(d);setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),300)},3400)}
+function beep(){try{const a=new(window.AudioContext||window.webkitAudioContext)();[0,.18].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=t?1175:880;o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(.12,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t+.3);o.start(a.currentTime+t);o.stop(a.currentTime+t+.3)})}catch(e){}}
+const tempo=()=>S.cfg.alta?'50–65 min':LOJA.tempo;
+const cbHoje=()=>S.cfg.cashback*(S.cfg.quartaDobro&&new Date().getDay()===3?2:1);
+
+/* ============ INÍCIO ============ */
+function vInicio(){
+ const tiles=[['cardapio','📱','Cardápio digital','Link próprio da loja: o cliente escolhe, aplica cupom e paga com Pix sem baixar app.'],
+  ['whats','💬','WhatsApp com IA','A atendente virtual anota o pedido conversando, 24 horas, e manda direto para a cozinha.'],
+  ['pedidos','🧾','Gestor de pedidos','Todos os pedidos (cardápio, WhatsApp, iFood e balcão) numa tela só, com aviso sonoro.'],
+  ['atend','🤖','Atendimento','Caixa de entrada do WhatsApp: a IA responde e a equipe assume quando quiser.'],
+  ['editor','📋','Editar cardápio','Preço, foto, item em falta e destaque: muda aqui e aparece na hora para o cliente.'],
+  ['entregas','🛵','Entregas','Despacho para motoboys, mapa ao vivo e acerto do dia sem caderninho.'],
+  ['moto','🏍️','App do motoboy','O entregador vê as corridas, abre a rota e confirma a entrega pelo celular.'],
+  ['marketing','🎯','Marketing','Cupons, cashback, ranking de clientes e campanhas no WhatsApp para quem sumiu.'],
+  ['relatorios','📊','Relatórios','Faturamento, funil do cardápio, margem por produto e quanto deixou de pagar em comissão.']];
+ return `<div class="hero"><div><span class="pill">Demonstração interativa • dados fictícios</span>
+  <h1>Seu delivery no canal próprio, <span>sem comissão por pedido.</span></h1>
+  <p>Cardápio digital, atendente com IA no WhatsApp, gestor de pedidos, entregadores, cupons, cashback e relatórios — tudo num lugar só, com a cara do seu restaurante.</p>
+  <div class="row g8 wrap"><button class="btn pri" onclick="go('cardapio')">📱 Fazer um pedido de teste</button><button class="btn" onclick="go('pedidos')">🧾 Abrir o painel do restaurante</button></div></div>
+  <div class="hs"><div><b>0%</b><span>de comissão nos pedidos do canal próprio</span></div><div><b>24 h</b><span>atendimento automático no WhatsApp</span></div><div><b>1 painel</b><span>para cardápio, WhatsApp, iFood e balcão</span></div></div></div>
+ <h2 class="sec-t">Como testar em 1 minuto</h2>
+ <div class="grid g3 mb">
+  <div class="card step"><i>1</i><div><b>Peça como cliente</b><p>Abra o <a onclick="go('cardapio')">Cardápio digital</a> ou converse no <a onclick="go('whats')">WhatsApp</a> e finalize um pedido.</p></div></div>
+  <div class="card step"><i>2</i><div><b>Veja chegar na loja</b><p>Em <a onclick="go('pedidos')">Pedidos</a> o pedido aparece com aviso sonoro. Aceite, marque pronto e despache.</p></div></div>
+  <div class="card step"><i>3</i><div><b>Acompanhe tudo se mexer</b><p>O cliente recebe cada etapa no WhatsApp, e o motoboy confirma a entrega no <a onclick="go('moto')">app dele</a>.</p></div></div></div>
+ <h2 class="sec-t">Todas as telas</h2>
+ <div class="grid g3 mb">${tiles.map(([id,e,t,d])=>`<div class="card tile" onclick="go('${id}')"><div class="e">${e}</div><b>${t}</b><span>${d}</span></div>`).join('')}</div>
+ <h2 class="sec-t">Planos <span class="muted" style="font-size:13px;font-weight:500">(valores de exemplo, para você definir)</span></h2>
+ <div class="grid g3">
+  <div class="card plan"><b>Essencial</b><div class="pr">R$ 99<small>/mês</small></div><ul class="ck"><li>Cardápio digital e link próprio</li><li>Gestor de pedidos</li><li>Pix e cartão online</li><li>Cupons</li></ul></div>
+  <div class="card plan dest"><span class="pill br">Mais vendido</span><b style="display:block;margin-top:8px">Profissional</b><div class="pr">R$ 199<small>/mês</small></div><ul class="ck"><li>Tudo do Essencial</li><li>Atendente com IA no WhatsApp</li><li>Motoboys e app do entregador</li><li>Cashback, fidelidade e campanhas</li><li>Relatórios completos</li></ul></div>
+  <div class="card plan"><b>Redes</b><div class="pr">Sob consulta</div><ul class="ck"><li>Várias lojas num painel só</li><li>Domínio próprio</li><li>Integrações com iFood e PDV</li><li>Implantação assistida</li></ul></div></div>`}
+
+/* ============ CARDÁPIO DO CLIENTE ============ */
+function vCardapio(){return cab('Cardápio digital','O que o cliente vê ao abrir o link da loja — sem baixar aplicativo')+`<div class="phone-wrap">${phone(cvScreen())}
+ <div class="card explain"><h3 class="h3">Experimente</h3><ul class="ck">
+ <li>Toque num produto, escolha adicionais e coloque na sacola.</li>
+ <li>Na sacola, teste os cupons <span class="code">VOLTA10</span>, <span class="code">FRETE0</span> ou <span class="code">BEMVINDO</span>.</li>
+ <li>Pague com Pix (simulado) e veja o pedido chegar em <a onclick="go('pedidos')">Pedidos</a>.</li>
+ <li>Mude o status no painel e acompanhe aqui e no <a onclick="go('whats')">WhatsApp</a>.</li>
+ <li>Marque um item “em falta” em <a onclick="go('editor')">Editar cardápio</a> e veja ele ficar esgotado aqui.</li></ul>
+ <h3 class="h3 mt">Link da loja</h3><div class="linkbox">${LOJA.link}</div><p class="sub">Também pode usar domínio próprio, como pedir.burgerdavila.com.br, e um QR Code na mesa e na embalagem.</p></div></div>`}
+function cvScreen(){const t=S.cm.tela;if(t==='produto')return cvProduto();if(t==='sacola')return cvSacola();if(t==='pix')return cvPix();if(t==='acomp')return cvAcomp();return cvMenu()}
+function cvGo(t){S.cm.tela=t;RESET.cv=true;render()}
+function preco(p){return (p.de?`<span class="de">${brl(p.de)}</span>`:'')+brl(p.preco)}
+function pItem(p){return `<div class="pi ${p.falta?'off':''}" ${p.falta?'':`onclick="abrirProd(${p.id})"`}><div class="tx"><h4>${esc(p.nome)}</h4><p>${esc(p.desc)}</p><div class="price">${p.falta?'<span class="pill">Esgotado hoje</span>':preco(p)}</div></div><div class="im" style="background:${p.cor}">${p.emoji}</div></div>`}
+function cvMenu(){
+ const sel=S.cm.cat,dest=P.filter(p=>p.dest&&p.ativo&&!p.falta),n=S.cart.reduce((a,i)=>a+i.qtd,0);
+ const lista=(sel==='Todos'?CATS:[sel]).map(c=>{const ps=P.filter(p=>p.cat===c&&p.ativo);return ps.length?`<div class="cv-cat">${c}</div>`+ps.map(pItem).join(''):''}).join('');
+ return `<div class="scroll" data-keep="cv"><div class="cv-hero"><div class="cv-logo">🍔</div></div>
+ <div class="cv-info"><h2>${LOJA.nome}</h2>
+  <div class="cv-meta"><span class="pill ${S.cfg.aberta?'ok':'bad'}">● ${S.cfg.aberta?'Aberto':'Fechado agora'}</span><span>🕒 ${tempo()}</span><span>🛵 ${brl(LOJA.taxa)}</span></div>
+  <div class="cv-meta"><span>Pedido mínimo ${brl(LOJA.minimo)}</span><span>⭐ 4,8 (1,2 mil avaliações)</span></div>
+  <div class="cv-cb">💰 Ganhe <b>${cbHoje()}% de cashback</b> em todo pedido para usar no próximo</div></div>
+ ${S.cfg.aberta?'':'<div class="cv-closed">A loja está pausada no momento. Dá para ver o cardápio, mas não dá para pedir agora.</div>'}
+ <div class="bn">${BANNERS.map(b=>`<div style="background:${b.bg}"><span>${b.e}</span><b>${b.t}</b><small>${b.s}</small></div>`).join('')}</div>
+ ${sel==='Todos'&&dest.length?`<div class="cv-cat">⭐ Destaques</div><div class="dest">${dest.map(p=>`<div class="dc" onclick="abrirProd(${p.id})"><div class="im" style="background:${p.cor}">${p.emoji}</div><b>${esc(p.nome)}</b><span>${brl(p.preco)}</span></div>`).join('')}</div>`:''}
+ <div class="chips">${['Todos',...CATS].map(c=>`<button class="chip ${sel===c?'on':''}" onclick="S.cm.cat='${c}';render()">${c}</button>`).join('')}</div>
+ ${lista}<div style="height:90px"></div></div>
+ ${n?`<button class="bag" onclick="cvGo('sacola')"><span>🛍️ Ver sacola • ${n} ${n>1?'itens':'item'}</span><span>${brl(cartTot().sub)}</span></button>`:''}`}
+function abrirProd(id){Object.assign(S.cm,{tela:'produto',pid:id,qtd:1,adds:[],obs:''});RESET.cv=true;render()}
+function togAdd(n){const a=S.cm.adds;a.includes(n)?a.splice(a.indexOf(n),1):a.push(n);render()}
+function cvProduto(){const p=P.find(x=>x.id===S.cm.pid);const unit=p.preco+S.cm.adds.reduce((a,n)=>a+ADDS.find(x=>x.n===n).p,0);
+ return `<div class="scroll" data-keep="cv"><div class="pd-im" style="background:${p.cor}"><button class="back" onclick="cvGo('menu')">←</button>${p.emoji}</div>
+ <div class="pad"><h2 class="pd-n">${esc(p.nome)}</h2><p class="muted m0">${esc(p.desc)}</p><div class="big2">${preco(p)}</div>
+ ${p.add?`<div class="pd-sec">Adicionais <small>opcional</small></div>${ADDS.map(a=>`<label class="opt"><span>${a.n}</span><span class="muted">${a.p?'+ '+brl(a.p):''}</span><input type="checkbox" ${S.cm.adds.includes(a.n)?'checked':''} onchange="togAdd('${a.n}')"></label>`).join('')}`:''}
+ <div class="pd-sec">Alguma observação?</div><textarea class="inp" rows="2" placeholder="Ex.: ponto da carne, sem picles…" oninput="S.cm.obs=this.value">${esc(S.cm.obs)}</textarea></div><div style="height:90px"></div></div>
+ <div class="pd-foot"><div class="qty"><button onclick="S.cm.qtd=Math.max(1,S.cm.qtd-1);render()">−</button><b>${S.cm.qtd}</b><button onclick="S.cm.qtd++;render()">+</button></div><button class="btn pri grow" onclick="addCart()">Adicionar • ${brl(unit*S.cm.qtd)}</button></div>`}
+function addCart(){const p=P.find(x=>x.id===S.cm.pid);const unit=p.preco+S.cm.adds.reduce((a,n)=>a+ADDS.find(x=>x.n===n).p,0);
+ const key=p.id+'|'+S.cm.adds.join(',')+'|'+S.cm.obs;const ex=S.cart.find(l=>l.key===key);
+ ex?ex.qtd+=S.cm.qtd:S.cart.push({key,pid:p.id,nome:p.nome,qtd:S.cm.qtd,unit,adds:[...S.cm.adds],obs:S.cm.obs});
+ toast(`${S.cm.qtd}x ${p.nome} na sacola 🛍️`);cvGo('menu')}
+function qCart(i,d){S.cart[i].qtd+=d;if(S.cart[i].qtd<1)S.cart.splice(i,1);render()}
+function cupom(code,sub){const c=CUP.find(x=>x.cod===code.trim().toUpperCase());if(!c||!c.ativo)return{ok:false,msg:'Cupom inválido ou expirado'};
+ if(sub<c.min)return{ok:false,msg:`Este cupom vale para pedidos a partir de ${brl(c.min)}`};
+ return{ok:true,desc:c.tipo==='pct'?sub*c.val/100:c.tipo==='fixo'?Math.min(c.val,sub):0,frete:c.tipo==='frete'}}
+function cartTot(){const sub=S.cart.reduce((a,l)=>a+l.unit*l.qtd,0);let taxa=S.cm.tipo==='retirada'?0:LOJA.taxa,desc=0,cupMsg='';
+ if(S.cm.cupomAp){const r=cupom(S.cm.cupomAp,sub);if(r.ok){desc=r.desc;if(r.frete)taxa=0}else cupMsg=r.msg}
+ return{sub,taxa,desc,cupMsg,total:Math.max(0,sub+taxa-desc)}}
+function aplicarCupom(){const v=$('#cv-cup').value;if(!v.trim())return;const r=cupom(v,cartTot().sub);
+ if(r.ok){S.cm.cupomAp=v.trim().toUpperCase();toast('Cupom aplicado 🎉')}else toast(r.msg);render()}
+function cvSacola(){const T=cartTot();
+ const pgs=[['pix','💠 Pix','aprovação na hora'],['cartao','💳 Cartão de crédito','pague agora, online'],['maq','🏧 Maquininha na entrega','débito ou crédito'],['din','💵 Dinheiro','na entrega']];
+ return `<div class="cv-top"><button class="back2" onclick="cvGo('menu')">←</button><b>Sacola</b><span></span></div>
+ <div class="scroll" data-keep="cv"><div class="pad">
+ ${S.cart.length?S.cart.map((l,i)=>`<div class="cl"><div><b>${l.qtd}x ${esc(l.nome)}</b>${l.adds.length?`<small>+ ${l.adds.join(', ')}</small>`:''}${l.obs?`<small>“${esc(l.obs)}”</small>`:''}</div><div class="cl-r"><span>${brl(l.unit*l.qtd)}</span><div class="qty sm"><button onclick="qCart(${i},-1)">−</button><b>${l.qtd}</b><button onclick="qCart(${i},1)">+</button></div></div></div>`).join(''):'<p class="muted">Sua sacola está vazia.</p>'}
+ <button class="lnk" onclick="cvGo('menu')">+ Adicionar mais itens</button>
+ <div class="pd-sec">Entrega ou retirada?</div><div class="seg2"><button class="${S.cm.tipo==='entrega'?'on':''}" onclick="S.cm.tipo='entrega';render()">🛵 Entrega</button><button class="${S.cm.tipo==='retirada'?'on':''}" onclick="S.cm.tipo='retirada';render()">🏃 Retirar no local</button></div>
+ ${S.cm.tipo==='entrega'?`<div class="pd-sec">Endereço</div><input class="inp" value="${esc(S.cm.end)}" oninput="S.cm.end=this.value">`:''}
+ <div class="pd-sec">Cupom</div>${S.cm.cupomAp?`<div class="cup-ok">🎟️ <b>${S.cm.cupomAp}</b> aplicado<button class="lnk" onclick="S.cm.cupomAp=null;render()">remover</button></div>`:`<div class="row g8"><input class="inp" id="cv-cup" placeholder="Digite o cupom" onkeydown="if(event.key==='Enter')aplicarCupom()"><button class="btn" onclick="aplicarCupom()">Aplicar</button></div>`}
+ ${T.cupMsg?`<div class="cup-err">${T.cupMsg}</div>`:''}
+ <div class="pd-sec">Pagamento</div>${pgs.map(([k,l,s])=>`<label class="opt pay ${S.cm.pag===k?'on':''}"><span><b>${l}</b><small>${s}</small></span><input type="radio" name="pg" ${S.cm.pag===k?'checked':''} onchange="S.cm.pag='${k}';render()"></label>`).join('')}
+ ${S.cm.pag==='din'?`<input class="inp" placeholder="Troco para quanto? (opcional)" value="${esc(S.cm.troco)}" oninput="S.cm.troco=this.value">`:''}
+ <div class="resumo"><div><span>Subtotal</span><span>${brl(T.sub)}</span></div><div><span>Taxa de entrega</span><span>${T.taxa?brl(T.taxa):'<b class="green">Grátis</b>'}</span></div>${T.desc?`<div class="green"><span>Desconto (${S.cm.cupomAp})</span><span>− ${brl(T.desc)}</span></div>`:''}<div class="tot"><span>Total</span><span>${brl(T.total)}</span></div><div class="cbk">💰 Você ganha ${brl(T.total*cbHoje()/100)} de cashback neste pedido</div></div>
+ </div><div style="height:90px"></div></div>
+ <div class="pd-foot"><button class="btn pri grow" ${S.cart.length?'':'disabled'} onclick="fazerPedido()">Fazer pedido • ${brl(T.total)}</button></div>`}
+function fazerPedido(){const T=cartTot();
+ if(!S.cfg.aberta)return toast('A loja está pausada agora. Abra a loja em Pedidos para testar.');
+ if(T.sub<LOJA.minimo)return toast(`O pedido mínimo é ${brl(LOJA.minimo)}`);
+ if(S.cm.pag==='pix')return cvGo('pix');
+ criarPedidoCv({cartao:'Cartão (pago)',maq:'Maquininha na entrega',din:'Dinheiro'+(S.cm.troco?' — troco p/ '+S.cm.troco:' na entrega')}[S.cm.pag])}
+function criarPedidoCv(pag){const T=cartTot();
+ const o=novoPedido({cliente:'Carla Mendes',tel:DEMO_TEL,end:S.cm.tipo==='retirada'?'Retirada no balcão':S.cm.end,
+  itens:S.cart.map(l=>({pid:l.pid,nome:l.nome+(l.adds.length?' (+ '+l.adds.join(', ')+')':''),qtd:l.qtd,preco:l.unit,obs:l.obs})),
+  pag,origem:'Cardápio',chat:'demo',taxa:T.taxa,desc:T.desc,cupom:S.cm.cupomAp});
+ S.cart=[];S.cm.cupomAp=null;S.track=o.id;
+ const ch=CH.find(c=>c.id==='demo');pushMsg(ch,{de:'bot',txt:`Oi, Carla! 👋 Recebemos seu pedido *#${o.id}* feito pelo cardápio (${brl(o.total)}).\n\nVou te avisando cada etapa por aqui 😉`});
+ chegou(o);cvGo('acomp')}
+function qrSvg(){const n=25;let seed=7;const r=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+ let s=`<svg viewBox="0 0 ${n} ${n}" width="180" height="180" shape-rendering="crispEdges"><rect width="${n}" height="${n}" fill="#fff"/>`;
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){const f=(x<8&&y<8)||(x>n-9&&y<8)||(x<8&&y>n-9);const v=r();if(!f&&v<.48)s+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#111"/>`}
+ const fin=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#111"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#111"/>`;
+ return s+fin(0,0)+fin(n-7,0)+fin(0,n-7)+'</svg>'}
+function cvPix(){const T=cartTot();return `<div class="cv-top"><button class="back2" onclick="cvGo('sacola')">←</button><b>Pagamento Pix</b><span></span></div>
+ <div class="scroll"><div class="pad center"><p class="muted m0">Escaneie o QR Code no app do banco ou copie o código</p><div class="qr">${qrSvg()}</div><div class="big2">${brl(T.total)}</div>
+ <div class="pix-code">00020126580014BR.GOV.BCB.PIX0136a1b2c3d4-e5f6-4789-9abc-def0123456785204000053039865406${T.total.toFixed(2)}5802BR5914BURGER DA VILA6009SAO PAULO62070503***6304A1B2</div>
+ <button class="btn mt" onclick="toast('Código Pix copiado 📋')">📋 Copiar código</button><p class="muted sm2">⏳ Aguardando pagamento… o código expira em 10 min</p>
+ <button class="btn ok mt" style="width:100%;padding:12px" onclick="criarPedidoCv('Pix (pago)')">✅ Simular pagamento aprovado</button></div></div>`}
+function cvAcomp(){const o=O.find(x=>x.id===S.track);if(!o){S.cm.tela='menu';return cvMenu()}
+ const steps=[['analise','Pedido recebido','A loja está confirmando'],['preparo','Em preparo','A cozinha já está fazendo'],['pronto','Pronto','Aguardando o entregador'],['entrega','Saiu para entrega',o.moto?moto(o.moto).nome+' está a caminho':'A caminho'],['finalizado','Entregue','Bom apetite! 😋']];
+ const idx=steps.findIndex(s=>s[0]===o.status);
+ return `<div class="cv-top"><button class="back2" onclick="cvGo('menu')">←</button><b>Pedido #${o.id}</b><span></span></div><div class="scroll"><div class="pad">
+ ${o.status==='cancelado'?'<div class="cup-err">O restaurante não conseguiu aceitar este pedido. Se você pagou online, o estorno é automático.</div>':`<div class="ac-eta"><small>Previsão de entrega</small><b>${o.status==='finalizado'?'Entregue ✅':tempo()}</b></div>
+ <div>${steps.map((s,i)=>`<div class="tl-i ${i<idx?'done':''} ${i===idx?'cur':''}"><i></i><div><b>${s[1]}</b><small>${s[2]}</small></div></div>`).join('')}</div>`}
+ <div class="resumo">${o.itens.map(i=>`<div><span>${i.qtd}x ${esc(i.nome)}</span><span>${brl(i.preco*i.qtd)}</span></div>`).join('')}<div class="tot"><span>Total</span><span>${brl(o.total)}</span></div><div class="muted sm2">${esc(o.pag)} • ${esc(o.end)}</div></div>
+ <div class="tip">💡 Mude o status deste pedido em <a onclick="go('pedidos')">Pedidos</a> e veja esta tela e o <a onclick="go('whats')">WhatsApp</a> se atualizarem.</div>
+ <button class="btn mt" style="width:100%" onclick="cvGo('menu')">Voltar ao cardápio</button></div></div>`}
+
+/* ============ WHATSAPP (IA) ============ */
+function pushMsg(ch,m){ch.msgs.push({t:hora(Date.now()),...m})}
+function msgHtml(m,p){
+ if(m.de==='sys')return `<div class="sys">${fmtTxt(m.txt)}</div>`;
+ const mine=p==='cli'?m.de==='cli':m.de!=='cli';
+ const lab=p==='loja'&&m.de!=='cli'?`<div class="who">${m.de==='bot'?'🤖 IA':'👤 Equipe'}</div>`:(p==='cli'&&m.de==='loja'?'<div class="who">Bruna • equipe</div>':'');
+ let body=fmtTxt(m.txt||'');
+ if(m.tipo==='pix')body=`<div class="wa-pix"><b>💠 Pix copia e cola</b><code>00020126580014BR.GOV.BCB.PIX0136a1b2c3d4…6304A1B2</code><small>Toque para copiar</small></div>`+body;
+ if(m.tipo==='img')body=`<div class="wa-img"><div>🧾<span>comprovante-pix.jpg</span></div></div>`;
+ return `<div class="msg ${mine?'out':'in'}">${lab}${body}<span class="t">${m.t}${mine&&p==='cli'?' <span class="tk">✓✓</span>':''}</span></div>`}
+function msgsHtml(ch,p){return ch.msgs.map(m=>msgHtml(m,p)).join('')+(ch.typing?`<div class="msg ${p==='cli'?'in':'out'} typing"><i></i><i></i><i></i></div>`:'')}
+const QUICK={inicio:['Oi, boa noite!','Me manda o cardápio','Até que horas vocês abrem?'],pedindo:['Quero 2 x-bacon e uma coca','Tem milkshake?','Uma batata também','Só isso'],
+ endereco:['Sim, pode ser','Rua Goiás, 100 – Centro'],pagamento:['Pix','Cartão','Dinheiro'],troco:['Troco para 100','Não precisa'],pix:['📎 Enviar comprovante do Pix'],feito:['Cadê meu pedido?','Obrigada!','5','Falar com atendente']};
+function quickHtml(ch){const q=ch.humano?['Ok, obrigada!','Quanto tempo falta?']:QUICK[ch.bot.st]||QUICK.inicio;return q.map(x=>`<button onclick="waSend(this.textContent)">${esc(x)}</button>`).join('')}
+function modoTxt(ch){return ch.humano?'👤 Com a equipe — a IA está pausada nesta conversa':'🤖 A IA está atendendo'}
+function vWhats(){const ch=CH.find(c=>c.id==='demo');
+ return cab('WhatsApp do cliente','A atendente virtual anota o pedido conversando e manda direto para a cozinha')+`<div class="phone-wrap">${phone(`<div class="wa-h"><span>←</span><div class="wa-av">🍔</div><div class="grow"><b>${LOJA.nome}</b><small id="wa-st">${ch.typing?'digitando…':'online'}</small></div><span>📹</span><span>📞</span></div>
+ <div class="wa-b" id="wa-msgs">${msgsHtml(ch,'cli')}</div><div class="wa-q" id="wa-q">${quickHtml(ch)}</div>
+ <div class="wa-in"><span>😊</span><input id="wa-inp" placeholder="Mensagem" autocomplete="off" onkeydown="if(event.key==='Enter')waSend(this.value)"><button class="wa-send" onclick="waSend($('#wa-inp').value)">➤</button></div>`)}
+ <div class="card explain"><h3 class="h3">Converse como se fosse o cliente</h3><p class="sub">Escreva do seu jeito (ex.: “quero 2 x-bacon e uma coca”) ou toque nas sugestões acima do teclado.</p>
+ <div class="row g8 wrap mt"><button class="btn pri" onclick="autoConversa()">▶ Ver conversa de exemplo</button><button class="btn" onclick="resetDemo()">↺ Recomeçar</button></div>
+ <div class="note" id="wa-mode">${modoTxt(ch)}</div>
+ <h3 class="h3 mt">O que a atendente virtual faz</h3><ul class="ck">
+ <li>Responde 24 horas no número oficial da loja.</li><li>Entende o pedido escrito do jeito do cliente, com as quantidades.</li>
+ <li>Avisa quando um item acabou e sugere outro.</li><li>Confirma endereço e forma de pagamento e recebe o comprovante do Pix.</li>
+ <li>Manda o pedido para o painel e avisa o cliente a cada etapa.</li><li>Se o cliente pedir “atendente”, passa para a equipe — veja em <a onclick="go('atend')">Atendimento</a>.</li></ul></div></div>`}
+function refreshChat(){
+ const ch=CH.find(c=>c.id==='demo');const a=$('#wa-msgs');
+ if(a){a.innerHTML=msgsHtml(ch,'cli');a.scrollTop=a.scrollHeight;$('#wa-q').innerHTML=quickHtml(ch);$('#wa-st').textContent=ch.typing?'digitando…':'online';const md=$('#wa-mode');if(md)md.textContent=modoTxt(ch)}
+ const b=$('#at-msgs');if(b){const c=CH.find(x=>x.id===S.atSel);b.innerHTML=msgsHtml(c,'loja');b.scrollTop=b.scrollHeight;const l=$('#at-list');if(l)l.innerHTML=atList()}
+ renderSide()}
+function waSend(txt){txt=(txt||'').trim();if(!txt)return;const ch=CH.find(c=>c.id==='demo');const inp=$('#wa-inp');if(inp)inp.value='';
+ const img=txt.startsWith('📎');pushMsg(ch,img?{de:'cli',tipo:'img',txt:''}:{de:'cli',txt});
+ if(ch.humano){if(S.view!=='atend'||S.atSel!=='demo')ch.unread=true;refreshChat();return}
+ ch.typing=true;refreshChat();
+ setTimeout(()=>{ch.typing=false;botReply(ch,img?'comprovante':txt).forEach(r=>pushMsg(ch,typeof r==='string'?{de:'bot',txt:r}:{de:'bot',...r}));refreshChat()},800+Math.random()*700)}
+let autoTok=0;
+function autoConversa(){resetDemo();const tok=++autoTok;
+ ['Oi, boa noite!','Quero 2 x-bacon, uma batata e 2 cocas','Tem milkshake?','Então manda um brownie também','Só isso','Sim, pode ser','Pix','📎 Enviar comprovante do Pix']
+ .forEach((m,i)=>setTimeout(()=>{if(tok===autoTok)waSend(m)},700+i*2900))}
+function resetDemo(){autoTok++;const ch=CH.find(c=>c.id==='demo');ch.msgs=[];ch.humano=false;ch.typing=false;ch.unread=false;ch.bot={st:'inicio',itens:[],end:ENDS[0]};refreshChat()}
+const NUM={um:1,uma:1,dois:2,duas:2,tres:3,quatro:4,cinco:5};
+function parseItens(t){const out=[];let used=t;
+ const al=P.flatMap(p=>p.alias.map(a=>({a,p}))).sort((x,y)=>y.a.length-x.a.length);
+ for(const {a,p} of al){let i=used.indexOf(a);while(i>=0){const pre=t.slice(Math.max(0,i-12),i);const m=pre.match(/(?:^|\s)(\d+|uma|um|dois|duas|tres|quatro|cinco)\s*x?\s*$/);
+  const q=m?(+m[1]||NUM[m[1]]||1):1;const ex=out.find(o=>o.p.id===p.id);ex?ex.q+=q:out.push({p,q});
+  used=used.slice(0,i)+' '.repeat(a.length)+used.slice(i+a.length);i=used.indexOf(a)}}
+ return out}
+const subIt=its=>its.reduce((a,i)=>a+i.preco*i.qtd,0);
+const listaIt=its=>its.map(i=>`• ${i.qtd}x ${i.nome} — ${brl(i.preco*i.qtd)}`).join('\n');
+function statusTxt(o){if(!o)return 'Não achei seu pedido 🤔';return {analise:`Seu pedido *#${o.id}* está sendo confirmado pela loja ⏳`,preparo:`Seu pedido *#${o.id}* está em preparo 👨‍🍳 Previsão: *${tempo()}*.`,pronto:`Seu pedido *#${o.id}* está pronto e já vai sair 🛍️`,entrega:`Seu pedido *#${o.id}* já está a caminho com *${o.moto?moto(o.moto).nome:'nosso entregador'}* 🛵`,finalizado:`Seu pedido *#${o.id}* já foi entregue ✅`,cancelado:`O pedido *#${o.id}* foi cancelado.`}[o.status]}
+function finalizar(ch){const b=ch.bot;const lista=listaIt(b.itens);
+ const o=novoPedido({cliente:ch.nome,tel:ch.tel,end:b.end,itens:b.itens.map(i=>({...i})),pag:b.pag,origem:'WhatsApp',chat:ch.id});
+ b.st='feito';b.pedido=o.id;b.itens=[];chegou(o);
+ return [`Pedido *#${o.id}* confirmado! ✅\n\n${lista}\n• Entrega — ${brl(o.taxa)}\n\nTotal: *${brl(o.total)}*\nPagamento: ${o.pag}\n\nJá mandei para a cozinha 👨‍🍳 Previsão: *${tempo()}*. Vou te avisando por aqui!`]}
+function botReply(ch,txt){
+ const b=ch.bot,t=norm(txt).trim(),found=parseItens(t);
+ if(/atendente|humano|pessoa|falar com alguem/.test(t)){ch.humano=true;ch.unread=true;return['Claro! Já chamei alguém da equipe 🙋‍♀️ Só um instante.',{de:'sys',txt:'Conversa transferida para a equipe'}]}
+ if(b.st==='feito'){
+  if(/obrigad|valeu|brigad/.test(t))return['Nós que agradecemos! 🧡 Bom apetite!'];
+  if(/cade|demora|status|chega|falta|onde/.test(t))return[statusTxt(O.find(x=>x.id===b.pedido))];
+  if(/^[1-5]$/.test(t))return[`Obrigada pela nota ${t} ⭐! Sua opinião vai direto para a equipe.`];
+  if(!found.length)return['Posso ajudar em mais alguma coisa? Para um novo pedido é só me dizer o que vai ser 😉'];
+  b.st='pedindo';b.itens=[]}
+ if(b.st==='endereco'){if(!/^(sim|s\b|isso|pode|ok|esse|mesmo|confirm|certo)/.test(t))b.end=txt.trim();b.st='pagamento';
+  return[`Fechado! 📍 Entrega em *${b.end}*.\n\nTotal: *${brl(subIt(b.itens)+LOJA.taxa)}* (já com a entrega de ${brl(LOJA.taxa)}).\n\nComo prefere pagar? *Pix*, *cartão* (mando o link) ou *dinheiro* na entrega?`]}
+ if(b.st==='pagamento'){
+  if(/pix/.test(t)){b.st='pix';return[{tipo:'pix',txt:`Total: *${brl(subIt(b.itens)+LOJA.taxa)}*\nCódigo acima 👆 Assim que pagar, é só mandar o comprovante aqui.`}]}
+  if(/cart|credito|debito/.test(t)){b.pag='Cartão (pago)';return['Aqui está seu link de pagamento seguro 🔒\n🔗 *pagar.meudelivery.com.br/bv/x7K2*',{de:'sys',txt:'Simulação: pagamento aprovado no link'},...finalizar(ch)]}
+  if(/dinheiro|especie/.test(t)){b.st='troco';return['Precisa de troco? Para quanto?']}
+  return['Pode ser *Pix*, *cartão* ou *dinheiro* 😊']}
+ if(b.st==='troco'){b.pag=/nao|sem troco|nao precisa|trocado/.test(t)?'Dinheiro (sem troco)':'Dinheiro — '+txt.trim();return finalizar(ch)}
+ if(b.st==='pix'){if(/comprovante|paguei|pago|pronto|feito|enviei/.test(t)){b.pag='Pix (pago)';return['Recebi o comprovante, pagamento confirmado! 💚',...finalizar(ch)]}return['Fico no aguardo do comprovante do Pix 😊']}
+ if(found.length){
+  const sem=found.filter(f=>f.p.falta||!f.p.ativo),ok=found.filter(f=>!f.p.falta&&f.p.ativo);
+  ok.forEach(f=>{const ex=b.itens.find(i=>i.pid===f.p.id);ex?ex.qtd+=f.q:b.itens.push({pid:f.p.id,nome:f.p.nome,qtd:f.q,preco:f.p.preco,obs:''})});
+  b.st='pedindo';const r=[];
+  if(sem.length)r.push(`Poxa, ${sem.map(f=>'o *'+f.p.nome+'*').join(' e ')} acabou por hoje 😕\nQue tal um *Brownie com Sorvete* (${brl(16.9)})? Fica uma delícia!`);
+  if(ok.length){const cats=b.itens.map(i=>P.find(p=>p.id===i.pid).cat);
+   const sug=!cats.includes('Bebidas')?'Quer uma *Coca-Cola* geladinha pra acompanhar? 🥤':!cats.includes('Porções')&&!cats.includes('Combos')?'Uma *Batata Rústica* vai muito bem junto 😉':'Se for só isso, é só dizer *só isso*.';
+   r.push(`Anotado! ✅\n${listaIt(b.itens)}\n\nSubtotal: *${brl(subIt(b.itens))}*\n\nMais alguma coisa? ${sug}`)}
+  return r}
+ if(b.st==='pedindo'&&b.itens.length&&/(so isso|e isso|e so|pode fechar|fechar|finaliza|nada mais|mais nada|^nao|^so\b|^isso)/.test(t)){
+  b.st='endereco';return[`Perfeito! Seu pedido:\n${listaIt(b.itens)}\n\nEntrego no mesmo endereço do último pedido?\n📍 *${b.end}*`]}
+ if(/cardapio|menu|link|opcoes/.test(t))return[`Aqui está nosso cardápio completo com fotos 👇\n🔗 *${LOJA.link}*\n\nMas pode pedir por aqui mesmo, é só me dizer!`];
+ if(/horario|abre|fecha|aberto|que horas/.test(t))return['Funcionamos de terça a domingo, das *18h às 23h30* 🕕 Hoje estamos abertos!'];
+ if(/entrega|bairro|taxa|frete/.test(t))return[`Entregamos em toda a cidade 🛵 Taxa de *${brl(LOJA.taxa)}* e tempo de *${tempo()}*. Acima de R$ 40 o frete sai grátis com o cupom *FRETE0*.`];
+ if(b.st==='inicio'||/^(oi|ola|boa|bom dia|e ai|eai|opa|hey)/.test(t)){b.st='pedindo';
+  return[`Oi! 👋 Eu sou a Lia, atendente virtual do *${LOJA.nome}*.\n\nPode fazer seu pedido aqui mesmo, é só escrever o que vai querer. Se preferir ver as fotos, o cardápio está em:\n🔗 *${LOJA.link}*\n\n🔥 Hoje tem *Combo Vila* de ~R$ 52,90~ por *R$ 45,90*`]}
+ return['Hmm, não entendi direitinho 😅\nVocê pode escrever o pedido assim: *“1 Smash Duplo e 1 Coca”*.\nSe preferir falar com alguém da equipe, é só digitar *atendente*.']}
+
+/* ============ PEDIDOS (painel) ============ */
+const COLS=[['analise','Em análise'],['preparo','Em preparo'],['pronto','Pronto'],['entrega','Em entrega'],['finalizado','Finalizados']];
+function kpiHoje(){const v=O.filter(o=>o.status!=='cancelado');const n=31+v.length,fat=1742.6+v.reduce((a,o)=>a+o.total,0);
+ return{n,fat,tk:fat/n,and:O.filter(o=>['analise','preparo','pronto','entrega'].includes(o.status)).length}}
+function vPedidos(){const k=kpiHoje();
+ return cab('Pedidos',`Gestor em tempo real • ${LOJA.nome}`,`
+ <label class="tg"><span class="sw"><input type="checkbox" ${S.cfg.aberta?'checked':''} onchange="S.cfg.aberta=this.checked;toast(this.checked?'Loja aberta 🟢':'Loja pausada — o cardápio mostra “fechado agora”');render()"><span></span></span>${S.cfg.aberta?'Loja aberta':'Loja pausada'}</label>
+ <label class="tg"><span class="sw warn"><input type="checkbox" ${S.cfg.alta?'checked':''} onchange="S.cfg.alta=this.checked;toast(this.checked?'Alta demanda: o tempo de entrega passou para 50–65 min':'Tempo de entrega normal');render()"><span></span></span>Alta demanda</label>
+ <button class="btn ${S.cfg.sim?'ok':''}" onclick="toggleSim()">${S.cfg.sim?'⏸ Parar simulação':'▶ Simular pedidos chegando'}</button>`)
+ +`<div class="grid g4 mb">${kpi('Pedidos hoje',k.n,'▲ 12% vs. sexta passada')}${kpi('Faturamento hoje',brl(k.fat),'▲ 9%')}${kpi('Ticket médio',brl(k.tk))}${kpi('Em andamento',k.and)}</div>
+ <div class="kb">${COLS.map(([st,lb])=>{let l=O.filter(o=>o.status===st);const tot=l.length;l=st==='finalizado'?l.slice(-6).reverse():l.sort((a,b)=>a.created-b.created);
+  return `<div class="col col-${st}"><h3>${lb}<span>${tot}</span></h3>${l.map(card).join('')||'<div class="empty">Nenhum pedido</div>'}</div>`}).join('')}</div>`}
+function card(o){const m=minAgo(o.created),late=(o.status==='analise'&&m>=5)||(o.status==='preparo'&&m>=25);
+ return `<div class="oc ${o.fresh?'fresh':''}" onclick="openOrder(${o.id})"><div class="oc-h"><b>#${o.id}</b>${srcPill(o.origem)}<span class="tm ${late?'late':''}">${o.status==='finalizado'?hora(o.created):m?'há '+m+' min':'agora'}</span></div>
+ <div class="oc-n">${esc(o.cliente)}</div><div class="oc-i">${esc(o.itens.map(i=>i.qtd+'x '+i.nome).join(', '))}</div>
+ ${o.moto&&o.status==='entrega'?`<div class="oc-m">🛵 ${moto(o.moto).nome}</div>`:''}
+ <div class="oc-f"><b>${brl(o.total)}</b><span>${esc(o.pag)}</span></div>${acts(o)}</div>`}
+function acts(o){const b=(f,l,c='')=>`<button class="btn sm ${c}" onclick="event.stopPropagation();${f}">${l}</button>`;
+ switch(o.status){case 'analise':return `<div class="oc-a">${b(`recusar(${o.id})`,'Recusar','ghost')}${b(`setSt(${o.id},'preparo')`,'Aceitar','pri')}</div>`;
+  case 'preparo':return `<div class="oc-a">${b(`printOrder(${o.id})`,'🖨️ Comanda')}${b(`setSt(${o.id},'pronto')`,'Pronto','pri')}</div>`;
+  case 'pronto':return `<div class="oc-a">${b(`despachar(${o.id})`,'Despachar 🛵','pri')}</div>`;
+  case 'entrega':return `<div class="oc-a">${b(`setSt(${o.id},'finalizado')`,'Finalizar','ok')}</div>`}return ''}
+function setSt(id,st){const o=O.find(x=>x.id===id);if(!o)return;o.status=st;
+ if(st==='finalizado'&&o.moto){const m=moto(o.moto);m.hoje++;m.aPagar+=m.taxa;if(!O.some(x=>x.status==='entrega'&&x.moto===m.id)&&m.status!=='folga')m.status='disponivel'}
+ notify(o,st);toast(`Pedido #${id} ${{preparo:'aceito — foi para o preparo 👨‍🍳',pronto:'pronto ✅',entrega:'saiu para entrega 🛵',finalizado:'entregue 📦',cancelado:'recusado'}[st]}`);
+ closeModal();render()}
+function recusar(id){setSt(id,'cancelado')}
+function despachar(id){const o=O.find(x=>x.id===id);
+ if(o.end==='Retirada no balcão'){setSt(id,'finalizado');return}
+ openModal(`<div class="row sb"><h2 class="m0">Despachar pedido #${id}</h2><button class="x" onclick="closeModal()">✕</button></div><p class="sub">📍 ${esc(o.end)}</p>
+ ${MOTOS.map(m=>`<div class="opt" style="cursor:default"><span><b>🛵 ${m.nome}</b><br><small class="muted">${m.veic} • ${m.hoje} entregas hoje</small></span>${m.status==='folga'?'<span class="pill">De folga</span>':`<span class="pill ${m.status==='rota'?'warn':'ok'}">${m.status==='rota'?'Em rota':'Disponível'}</span><button class="btn sm pri" onclick="doDesp(${id},${m.id})">Enviar</button>`}</div>`).join('')}
+ <p class="sub">O motoboy recebe a corrida no app e o cliente é avisado no WhatsApp.</p>`)}
+function doDesp(id,mid){const o=O.find(x=>x.id===id);o.moto=mid;moto(mid).status='rota';setSt(id,'entrega')}
+function notify(o,st){if(!o.chat)return;const ch=CH.find(c=>c.id===o.chat);if(!ch)return;const n=ch.nome.split(' ')[0];
+ const T={preparo:`👨‍🍳 Oba, ${n}! Seu pedido *#${o.id}* foi aceito e já está em preparo.`,pronto:`✅ Pedido *#${o.id}* pronto! Já, já sai para entrega.`,
+  entrega:`🛵 Seu pedido *#${o.id}* saiu para entrega com *${o.moto?moto(o.moto).nome:'nosso entregador'}*!\nAcompanhe: ${LOJA.link}/p/${o.id}`,
+  finalizado:`📦 Pedido entregue! Bom apetite 😋\n\nVocê ganhou *${brl(o.total*cbHoje()/100)}* de cashback para o próximo pedido 💰\n\nDe 1 a 5, que nota você dá?`,
+  cancelado:`😕 Infelizmente não conseguimos aceitar o pedido *#${o.id}* agora. Se você pagou online, o estorno é automático.`};
+ if(T[st]){pushMsg(ch,{de:'bot',txt:T[st]});refreshChat()}}
+function openOrder(id){const o=O.find(x=>x.id===id);const st={analise:'Em análise',preparo:'Em preparo',pronto:'Pronto',entrega:'Em entrega',finalizado:'Finalizado',cancelado:'Cancelado'}[o.status];
+ openModal(`<div class="row sb"><h2 class="m0">Pedido #${o.id}</h2><button class="x" onclick="closeModal()">✕</button></div>
+ <div class="row g8 wrap mt">${srcPill(o.origem)}<span class="pill">${st}</span><span class="pill">🕒 ${hora(o.created)}</span>${o.moto?`<span class="pill">🛵 ${moto(o.moto).nome}</span>`:''}</div>
+ <div class="md-sec"><b>${esc(o.cliente)}</b><div class="muted">${esc(o.tel)}</div><div>📍 ${esc(o.end)}</div></div>
+ <div class="md-sec">${o.itens.map(i=>`<div class="row sb"><span>${i.qtd}x ${esc(i.nome)}${i.obs?`<br><small class="warn-t">Obs.: ${esc(i.obs)}</small>`:''}</span><span>${brl(i.preco*i.qtd)}</span></div>`).join('')}</div>
+ <div class="resumo"><div><span>Subtotal</span><span>${brl(o.sub)}</span></div><div><span>Entrega</span><span>${brl(o.taxa)}</span></div>${o.desc?`<div class="green"><span>Desconto${o.cupom?' ('+o.cupom+')':''}</span><span>− ${brl(o.desc)}</span></div>`:''}<div class="tot"><span>Total</span><span>${brl(o.total)}</span></div><div class="muted">💳 ${esc(o.pag)}</div></div>
+ <div class="row g8 wrap mt"><button class="btn" onclick="printOrder(${o.id})">🖨️ Imprimir comanda</button>${o.chat?`<button class="btn" onclick="closeModal();S.atSel='${o.chat}';go('atend')">💬 Ver conversa</button>`:''}</div>
+ <div style="margin-top:8px">${acts(o)}</div>`)}
+function printOrder(id){const o=O.find(x=>x.id===id);const L=(a,b)=>a+' '.repeat(Math.max(1,32-a.length-b.length))+b;
+ const txt=['         '+LOJA.nome.toUpperCase(),'--------------------------------',L('PEDIDO #'+o.id,hora(o.created)),'Origem: '+o.origem,'--------------------------------',
+  ...o.itens.flatMap(i=>[L((i.qtd+'x '+i.nome).slice(0,22),brl(i.preco*i.qtd)),...(i.obs?['  >> '+i.obs.toUpperCase()]:[])]),'--------------------------------',
+  L('Subtotal',brl(o.sub)),L('Entrega',brl(o.taxa)),...(o.desc?[L('Desconto','-'+brl(o.desc))]:[]),L('TOTAL',brl(o.total)),'--------------------------------',
+  'Cliente: '+o.cliente,'Fone: '+o.tel,'End.: '+o.end,'Pgto: '+o.pag,'','     obrigado pela preferência!'].join('\n');
+ openModal(`<div class="row sb"><h2 class="m0">Comanda da cozinha</h2><button class="x" onclick="closeModal()">✕</button></div><p class="sub">Sai sozinha na impressora térmica quando o pedido é aceito.</p><pre class="rcpt">${esc(txt)}</pre>
+ <div class="row g8"><button class="btn pri" onclick="toast('Enviado para a impressora da cozinha 🖨️');closeModal()">Imprimir</button><button class="btn" onclick="openOrder(${o.id})">Voltar ao pedido</button></div>`)}
+let simT=null;
+function toggleSim(){S.cfg.sim=!S.cfg.sim;clearInterval(simT);if(S.cfg.sim){pedidoAleatorio();simT=setInterval(pedidoAleatorio,9000)}render()}
+function pedidoAleatorio(){const ps=P.filter(p=>p.ativo&&!p.falta),itens=[];const n=1+Math.floor(Math.random()*3);
+ for(let i=0;i<n;i++){const p=rnd(ps);const ex=itens.find(x=>x.pid===p.id);ex?ex.qtd++:itens.push(it(p.id,1))}
+ const origem=rnd(['Cardápio','Cardápio','WhatsApp','WhatsApp','iFood']);
+ chegou(novoPedido({cliente:rnd(NOMES),end:rnd(ENDS),itens,origem,pag:origem==='iFood'?'Pago no iFood':rnd(['Pix (pago)','Cartão (pago)','Maquininha na entrega','Dinheiro na entrega'])}))}
+function chegou(o){o.fresh=true;beep();toast(`🔔 Novo pedido #${o.id} • ${o.origem} • ${brl(o.total)}`,'go');setTimeout(()=>{o.fresh=false},6000);if(S.view==='pedidos')render();else renderSide()}
+
+/* ============ ATENDIMENTO ============ */
+function atList(){return `<div class="at-s"><input class="inp" placeholder="🔍 Buscar conversa"></div>`+CH.map(c=>{const l=c.msgs[c.msgs.length-1];
+ const prev=l?(l.tipo==='img'?'📎 Comprovante':(l.txt||'').replace(/[*~]/g,'').replace(/\n/g,' ').slice(0,48)):'Sem mensagens ainda';
+ return `<div class="at-i ${S.atSel===c.id?'on':''}" onclick="S.atSel='${c.id}';render()"><div class="wa-av">${c.nome[0]}</div><div class="grow"><div class="row sb"><b>${esc(c.nome)}${c.demo?' <small class="muted">(demo)</small>':''}</b><small class="muted">${l?l.t:''}</small></div><div class="at-p">${c.humano?'👤 ':'🤖 '}${esc(prev)}</div></div>${c.unread&&S.atSel!==c.id?'<span class="dot"></span>':''}</div>`}).join('')}
+function vAtend(){const c=CH.find(x=>x.id===S.atSel);c.unread=false;renderSide();
+ return cab('Atendimento','Todas as conversas do WhatsApp da loja — a IA atende e a equipe assume quando quiser',`<button class="btn" onclick="go('whats')">💬 Abrir o WhatsApp do cliente (demo)</button>`)
+ +`<div class="at"><div class="card at-l" id="at-list">${atList()}</div><div class="card at-c">
+ <div class="at-h"><div class="wa-av">${c.nome[0]}</div><div class="grow"><b>${esc(c.nome)}</b><small>${c.tel}</small></div><span class="pill ${c.humano?'warn':'ok'}">${c.humano?'👤 Equipe atendendo':'🤖 IA atendendo'}</span><button class="btn sm" onclick="togHumano('${c.id}')">${c.humano?'Devolver para a IA':'Assumir conversa'}</button></div>
+ <div class="wa-b" id="at-msgs">${c.msgs.length?msgsHtml(c,'loja'):'<div class="sys">Nenhuma mensagem ainda. Mande algo pelo WhatsApp do cliente (demo).</div>'}</div>
+ ${c.humano?`<div class="wa-in"><input id="at-inp" placeholder="Responder como equipe…" autocomplete="off" onkeydown="if(event.key==='Enter')atSend()"><button class="wa-send" onclick="atSend()">➤</button></div>`:'<div class="at-lock">A IA está respondendo esta conversa. Clique em <b>Assumir conversa</b> para responder você mesmo.</div>'}</div></div>`}
+function togHumano(id){const c=CH.find(x=>x.id===id);c.humano=!c.humano;pushMsg(c,{de:'sys',txt:c.humano?'Conversa assumida pela equipe':'Conversa devolvida para a IA'});render()}
+function atSend(){const i=$('#at-inp');const v=i.value.trim();if(!v)return;const c=CH.find(x=>x.id===S.atSel);pushMsg(c,{de:'loja',txt:v});i.value='';refreshChat();i.focus()}
+
+/* ============ EDITOR DE CARDÁPIO ============ */
+function vEditor(){
+ return cab('Editar cardápio','O que você muda aqui aparece na hora no cardápio do cliente e na atendente do WhatsApp',`<button class="btn" onclick="toast('Simulação: importar o cardápio do iFood leva poucos minutos')">⬇️ Importar do iFood</button><button class="btn" onclick="go('cardapio')">👁️ Ver como cliente</button><button class="btn pri" onclick="novoProduto()">+ Novo produto</button>`)
+ +`<div class="card mb"><h3 class="h3">Banners do topo</h3><div class="bn-ed">${BANNERS.map(b=>`<div style="background:${b.bg}"><span>${b.e}</span><b>${b.t}</b><small>${b.s}</small></div>`).join('')}<div class="bn-add" onclick="toast('Simulação: a IA cria o banner a partir da foto do produto ✨')">✨ Gerar banner com IA</div></div></div>`
+ +CATS.map(c=>{const ps=P.filter(p=>p.cat===c);return `<div class="card mb"><h3 class="h3">${c} <span class="pill">${ps.length} itens</span></h3><div class="tw"><table class="tbl"><tr><th></th><th>Produto</th><th>Preço</th><th>Custo</th><th>Margem</th><th>Status</th><th>Destaque</th></tr>
+ ${ps.map(p=>{const mg=(p.preco-p.custo)/p.preco*100;return `<tr><td><div class="pim" style="background:${p.cor}">${p.emoji}</div></td><td><b>${esc(p.nome)}</b><div class="muted" style="font-size:12px">${esc(p.desc)}</div></td>
+ <td><input class="inp pin" value="${p.preco.toFixed(2).replace('.',',')}" onchange="setPreco(${p.id},this.value)"></td><td class="muted">${brl(p.custo)}</td>
+ <td><span class="pill ${mg>=60?'ok':mg>=50?'warn':'bad'}">${mg.toFixed(0)}%</span></td>
+ <td><select class="inp" style="width:130px" onchange="setStP(${p.id},this.value)"><option value="ativo" ${p.ativo&&!p.falta?'selected':''}>🟢 Ativo</option><option value="falta" ${p.falta?'selected':''}>🟡 Em falta</option><option value="inativo" ${!p.ativo?'selected':''}>⚪ Oculto</option></select></td>
+ <td><button class="star ${p.dest?'on':''}" onclick="P.find(x=>x.id===${p.id}).dest=!${p.dest};render()">⭐</button></td></tr>`}).join('')}</table></div></div>`}).join('')}
+function setPreco(id,v){const n=parseFloat(String(v).replace(/\./g,'').replace(',','.'));if(isNaN(n)||n<=0)return toast('Preço inválido');const p=P.find(x=>x.id===id);p.preco=n;toast(`${p.nome} agora custa ${brl(n)}`);render()}
+function setStP(id,v){const p=P.find(x=>x.id===id);p.ativo=v!=='inativo';p.falta=v==='falta';toast(`${p.nome}: ${v==='falta'?'marcado em falta (aparece esgotado)':v==='inativo'?'oculto do cardápio':'ativo'}`);render()}
+const EMOS=['🍔','🌭','🍕','🌮','🥗','🍟','🍗','🥤','🍰','🍦','🍣','🥪'];
+function novoProduto(){S.npEmo='🍔';openModal(`<div class="row sb"><h2 class="m0">Novo produto</h2><button class="x" onclick="closeModal()">✕</button></div>
+ <label class="lb">Nome</label><input class="inp" id="np-n" placeholder="Ex.: X-Tudo">
+ <label class="lb">Categoria</label><select class="inp" id="np-c">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+ <div class="grid g2" style="gap:10px"><div><label class="lb">Preço (R$)</label><input class="inp" id="np-p" placeholder="32,90"></div><div><label class="lb">Custo (R$)</label><input class="inp" id="np-k" placeholder="12,00"></div></div>
+ <label class="lb">Descrição</label><textarea class="inp" id="np-d" rows="2"></textarea>
+ <label class="lb">Foto (no sistema real, a pessoa envia a foto; aqui escolha um ícone)</label><div class="emo" id="np-e">${EMOS.map(e=>`<button class="${e==='🍔'?'on':''}" onclick="S.npEmo='${e}';document.querySelectorAll('#np-e button').forEach(b=>b.classList.toggle('on',b.textContent==='${e}'))">${e}</button>`).join('')}</div>
+ <button class="btn pri mt" style="width:100%" onclick="salvarProduto()">Salvar produto</button>`)}
+function salvarProduto(){const nome=$('#np-n').value.trim(),pr=parseFloat($('#np-p').value.replace(',','.')),k=parseFloat($('#np-k').value.replace(',','.'))||0;
+ if(!nome||isNaN(pr))return toast('Preencha nome e preço');
+ P.push({id:Math.max(...P.map(p=>p.id))+1,cat:$('#np-c').value,nome,desc:$('#np-d').value.trim()||'Novidade da casa.',preco:pr,custo:k||pr*.38,emoji:S.npEmo,cor:rnd(['#ffe1bf','#ffd3c4','#dff3d8','#dbeeff','#efe4d8']),ativo:true,falta:false,dest:false,add:false,alias:[norm(nome)]});
+ closeModal();toast(`${nome} adicionado ao cardápio ✅`);render()}
+
+/* ============ ENTREGAS ============ */
+function mapa(rota){let s=`<svg viewBox="0 0 400 240" class="map"><rect width="400" height="240" fill="#eaf0e1"/>`;
+ for(let x=0;x<400;x+=50)for(let y=0;y<240;y+=40)s+=`<rect x="${x+5}" y="${y+5}" width="40" height="30" rx="4" fill="#fff" opacity=".75"/>`;
+ s+=`<path d="M0 128 Q200 92 400 150" stroke="#d6dccb" stroke-width="9" fill="none"/><path d="M120 0 Q150 120 110 240" stroke="#d6dccb" stroke-width="7" fill="none"/>`;
+ rota.forEach(o=>{const h=o.id*37,x=40+(h%320),y=24+((h*7)%190),mx=(162+x)/2,my=(110+y)/2;
+  s+=`<line x1="162" y1="110" x2="${x}" y2="${y}" stroke="#ff5a1f" stroke-dasharray="5 5" stroke-width="2"/><circle cx="${x}" cy="${y}" r="7" fill="#2563eb" stroke="#fff" stroke-width="2"/><text x="${x}" y="${y-12}" text-anchor="middle" font-size="11" font-weight="700" fill="#1b1d22">#${o.id}</text><text x="${mx}" y="${my+5}" text-anchor="middle" font-size="16">🛵</text>`});
+ return s+`<rect x="149" y="97" width="26" height="26" rx="7" fill="#ff5a1f"/><text x="162" y="115" text-anchor="middle" font-size="14">🍔</text></svg>`}
+function vEntregas(){const rota=O.filter(o=>o.status==='entrega');
+ return cab('Entregas','Motoboys, despacho e acerto do dia — sem caderninho')
+ +`<div class="grid g4 mb">${kpi('Em rota agora',MOTOS.filter(m=>m.status==='rota').length)}${kpi('Disponíveis',MOTOS.filter(m=>m.status==='disponivel').length)}${kpi('Entregas hoje',MOTOS.reduce((a,m)=>a+m.hoje,0))}${kpi('A pagar aos motoboys',brl(MOTOS.reduce((a,m)=>a+m.aPagar,0)))}</div>
+ <div class="grid g2x mb"><div class="card"><h3 class="h3">Mapa ao vivo <span class="pill info">simulado</span></h3>${mapa(rota)}</div>
+ <div class="card"><h3 class="h3">Em rota agora</h3>${rota.map(o=>`<div class="opt" style="cursor:default"><span><b>#${o.id} • ${esc(o.cliente)}</b><br><small class="muted">📍 ${esc(o.end)}<br>🛵 ${o.moto?moto(o.moto).nome:'—'} • saiu há ${minAgo(o.created)} min</small></span><button class="btn sm ok" onclick="setSt(${o.id},'finalizado')">Entregue</button></div>`).join('')||'<div class="empty">Nenhuma entrega em rota. Despache um pedido “Pronto” em Pedidos.</div>'}</div></div>
+ <div class="card"><h3 class="h3">Motoboys e acerto do dia</h3><div class="tw"><table class="tbl"><tr><th>Motoboy</th><th>Veículo</th><th>Status</th><th>Entregas hoje</th><th>Por entrega</th><th>A pagar</th><th></th></tr>
+ ${MOTOS.map(m=>`<tr><td><b>${m.nome}</b></td><td class="muted">${m.veic}</td><td><select class="inp" style="width:140px" onchange="setMoto(${m.id},this.value)"><option value="disponivel" ${m.status==='disponivel'?'selected':''}>🟢 Disponível</option><option value="rota" ${m.status==='rota'?'selected':''}>🟠 Em rota</option><option value="folga" ${m.status==='folga'?'selected':''}>⚪ Folga</option></select></td>
+ <td>${m.hoje}</td><td>${brl(m.taxa)}</td><td><b>${brl(m.aPagar)}</b></td><td class="row g8"><button class="btn sm" onclick="S.motoSel=${m.id};go('moto')">📱 App</button><button class="btn sm" ${m.aPagar?'':'disabled'} onclick="acerto(${m.id})">Fechar acerto</button></td></tr>`).join('')}</table></div></div>`}
+function setMoto(id,v){moto(id).status=v;render()}
+function acerto(id){const m=moto(id);toast(`Acerto de ${m.nome}: ${brl(m.aPagar)} pago ✅ (comprovante enviado no WhatsApp dele)`);m.aPagar=0;render()}
+
+/* ============ APP DO MOTOBOY ============ */
+function vMoto(){const m=moto(S.motoSel);
+ return cab('App do motoboy','O entregador usa pelo navegador do celular, sem instalar nada')+`<div class="phone-wrap">${phone(motoScreen(m))}
+ <div class="card explain"><h3 class="h3">Ver como</h3><div class="row g8 wrap">${MOTOS.map(x=>`<button class="btn ${x.id===S.motoSel?'pri':''}" onclick="S.motoSel=${x.id};render()">${x.nome.split(' ')[0]}</button>`).join('')}</div>
+ <h3 class="h3 mt">O que o motoboy faz no app</h3><ul class="ck"><li>Recebe a corrida assim que a loja despacha.</li><li>Abre a rota no Google Maps ou no Waze com um toque.</li><li>Vê se precisa cobrar na entrega e quanto.</li><li>Avisa o cliente que chegou e confirma a entrega.</li><li>Acompanha quanto ganhou no dia, sem caderninho.</li></ul>
+ <div class="tip">💡 Para aparecer uma corrida aqui, vá em <a onclick="go('pedidos')">Pedidos</a> e despache um pedido “Pronto” para ${m.nome.split(' ')[0]}.</div></div></div>`}
+function motoScreen(m){const minhas=O.filter(o=>o.status==='entrega'&&o.moto===m.id),feitas=O.filter(o=>o.status==='finalizado'&&o.moto===m.id);
+ return `<div class="mo-h"><div><small>Olá,</small><b>${m.nome.split(' ')[0]} 👋</b></div><span class="pill" style="background:#fff;color:${m.status==='folga'?'#6b7280':'#16a34a'}">● ${m.status==='folga'?'Offline':'Online'}</span></div>
+ <div class="scroll"><div class="mo-earn"><div><small>Ganhos hoje</small><b>${brl(m.hoje*m.taxa)}</b></div><div><small>Entregas</small><b>${m.hoje}</b></div><div><small>Por entrega</small><b>${brl(m.taxa)}</b></div></div>
+ <h4 class="mo-t">Entregas em andamento</h4>${minhas.map(o=>`<div class="mo-c"><div class="row sb"><b>#${o.id} • ${esc(o.cliente)}</b>${srcPill(o.origem)}</div><div class="mo-a">📍 ${esc(o.end)}</div>
+ <div class="mo-p">${/pago/i.test(o.pag)?'<span class="pill ok">Já pago — só entregar</span>':`<span class="pill warn">Cobrar ${brl(o.total)} • ${esc(o.pag)}</span>`}</div>
+ <div class="row g8"><button class="btn sm" onclick="toast('Abrindo a rota no Google Maps…')">🧭 Rota</button><button class="btn sm" onclick="toast('Cliente avisado: “seu pedido chegou” 📲')">📣 Cheguei</button><button class="btn sm ok" onclick="setSt(${o.id},'finalizado')">✅ Entregue</button></div></div>`).join('')
+ ||'<div class="mo-empty">Nenhuma entrega agora.<br>Fique por perto — a próxima corrida aparece aqui 🛵</div>'}
+ <h4 class="mo-t">Feitas hoje</h4>${feitas.slice(-5).reverse().map(o=>`<div class="mo-l"><span>#${o.id} • ${esc(o.end.split('–')[0])}</span><b>${brl(m.taxa)}</b></div>`).join('')||'<div class="mo-l muted">Nenhuma ainda</div>'}<div style="height:20px"></div></div>`}
+
+/* ============ MARKETING ============ */
+const cupDesc=c=>(c.tipo==='pct'?c.val+'% OFF':c.tipo==='fixo'?brl(c.val)+' OFF':'Frete grátis')+(c.min?` • mín. ${brl(c.min)}`:'');
+function vMarketing(){const sg=SEGS[S.mkSeg];
+ return cab('Marketing','Cupons, cashback, fidelidade e campanhas no WhatsApp para trazer o cliente de volta')
+ +`<div class="card mb"><div class="row sb"><h3 class="h3">Cupons</h3><button class="btn pri sm" onclick="novoCupom()">+ Novo cupom</button></div><div class="tw"><table class="tbl"><tr><th>Código</th><th>Desconto</th><th>Para quem</th><th>Usos</th><th>Conversão</th><th>Ativo</th></tr>
+ ${CUP.map((c,i)=>`<tr><td><span class="code"><b>${c.cod}</b></span></td><td>${cupDesc(c)}</td><td class="muted">${esc(c.regra)}</td><td>${c.usos}</td><td>${c.conv}%</td><td><label class="sw"><input type="checkbox" ${c.ativo?'checked':''} onchange="CUP[${i}].ativo=this.checked;toast('Cupom '+CUP[${i}].cod+(this.checked?' ativado':' desativado'))"><span></span></label></td></tr>`).join('')}</table></div></div>
+ <div class="grid g2 mb"><div class="card"><h3 class="h3">Cashback</h3><p class="sub">O cliente ganha de volta uma parte do pedido para usar no próximo.</p><div class="big" id="cb-v">${S.cfg.cashback}%</div>
+ <input type="range" min="0" max="15" value="${S.cfg.cashback}" class="rng" oninput="S.cfg.cashback=+this.value;$('#cb-v').textContent=this.value+'%'" onchange="toast('Cashback ajustado para '+this.value+'% — já aparece no cardápio')">
+ <label class="tg mt"><span class="sw"><input type="checkbox" ${S.cfg.quartaDobro?'checked':''} onchange="S.cfg.quartaDobro=this.checked"><span></span></span>Cashback em dobro às quartas (dia mais fraco)</label>
+ <div class="note">💰 R$ 3.482,10 em cashback gerado neste mês • 61% já voltou como novo pedido</div></div>
+ <div class="card"><h3 class="h3">Clientes mais fiéis</h3><table class="tbl" style="min-width:0"><tr><th></th><th>Cliente</th><th>Pedidos</th><th>Total gasto</th></tr>${FIEIS.map((f,i)=>`<tr><td>${['🥇','🥈','🥉','4º','5º'][i]}</td><td><b>${f[0]}</b></td><td>${f[1]}</td><td>${brl(f[2])}</td></tr>`).join('')}</table>
+ <div class="note">🎁 Clube de pontos: 1 ponto por real. 150 pontos = Coca grátis • 300 = Brownie • 600 = X-Bacon</div></div></div>
+ <div class="card"><h3 class="h3">Campanhas no WhatsApp</h3><p class="sub" style="margin-top:-6px;margin-bottom:12px">Escolha um grupo de clientes, ajuste a mensagem e agende o envio.</p>
+ <div class="segs">${SEGS.map((s,i)=>`<button class="seg ${S.mkSeg===i?'on':''}" onclick="S.mkSeg=${i};render()"><b>${s.n}</b><span>${s.q}</span><small>${s.d}</small></button>`).join('')}</div>
+ <div class="grid g2 mt"><div><label class="lb">Mensagem ({nome} vira o nome do cliente)</label><textarea id="mk-msg" rows="7" class="inp" oninput="$('#mk-prev').innerHTML=fmtTxt(this.value.replace(/\\{nome\\}/g,'Carla'))">${esc(sg.msg)}</textarea>
+ <label class="lb">Quando enviar</label><select class="inp" id="mk-qd"><option>Agora</option><option selected>Sexta, 18:00</option><option>Sábado, 11:00</option><option>Terça, 18:30</option></select>
+ <button class="btn pri mt" onclick="agendar()">📣 Agendar para ${sg.q} clientes</button></div>
+ <div><label class="lb">Prévia no celular do cliente</label><div class="wa-prev"><div class="msg in"><div id="mk-prev">${fmtTxt(sg.msg.replace(/\{nome\}/g,'Carla'))}</div><span class="t">18:00</span></div></div></div></div>
+ <h3 class="h3 mt">Histórico</h3><div class="tw"><table class="tbl"><tr><th>Campanha</th><th>Público</th><th>Data</th><th>Enviadas</th><th>Pedidos gerados</th><th>Faturamento</th><th>Status</th></tr>
+ ${CAMP.map(c=>`<tr><td><b>${esc(c.n)}</b></td><td class="muted">${c.seg}</td><td>${c.data}</td><td>${c.env}</td><td>${c.ped}</td><td>${typeof c.fat==='number'?brl(c.fat):c.fat}</td><td><span class="pill ${c.st==='Enviada'?'ok':'info'}">${c.st}</span></td></tr>`).join('')}</table></div></div>`}
+function agendar(){const sg=SEGS[S.mkSeg],q=$('#mk-qd').value;CAMP.unshift({n:'Campanha — '+sg.n,seg:sg.n,env:sg.q,ped:'—',fat:'—',st:q==='Agora'?'Enviando…':'Agendada',data:q});
+ toast(q==='Agora'?`Enviando para ${sg.q} clientes 📣`:`Campanha agendada para ${q} ✅`);render()}
+function novoCupom(){openModal(`<div class="row sb"><h2 class="m0">Novo cupom</h2><button class="x" onclick="closeModal()">✕</button></div>
+ <label class="lb">Código</label><input class="inp" id="nc-c" placeholder="Ex.: SEXTOU" style="text-transform:uppercase">
+ <label class="lb">Tipo</label><select class="inp" id="nc-t"><option value="pct">Desconto em %</option><option value="fixo">Desconto em R$</option><option value="frete">Frete grátis</option></select>
+ <div class="grid g2" style="gap:10px"><div><label class="lb">Valor</label><input class="inp" id="nc-v" placeholder="10"></div><div><label class="lb">Pedido mínimo (R$)</label><input class="inp" id="nc-m" placeholder="0"></div></div>
+ <label class="lb">Para quem</label><select class="inp" id="nc-r"><option>Todos os clientes</option><option>Clientes sumidos há 30+ dias</option><option>1º pedido no canal próprio</option><option>Aniversariantes do mês</option></select>
+ <label class="tg mt"><span class="sw"><input type="checkbox" checked><span></span></span>Mostrar no cardápio</label>
+ <button class="btn pri mt" style="width:100%" onclick="salvarCupom()">Criar cupom</button>`)}
+function salvarCupom(){const cod=$('#nc-c').value.trim().toUpperCase();if(!cod)return toast('Digite o código');
+ CUP.push({cod,tipo:$('#nc-t').value,val:parseFloat($('#nc-v').value.replace(',','.'))||0,min:parseFloat($('#nc-m').value.replace(',','.'))||0,regra:$('#nc-r').value,usos:0,conv:0,ativo:true});
+ closeModal();toast(`Cupom ${cod} criado — já funciona no cardápio 🎟️`);render()}
+
+/* ============ RELATÓRIOS ============ */
+function vRel(){const per=S.relPer;const D={hoje:{fat:2480.6,ped:44},'7':{fat:17845.3,ped:316},'30':{fat:74210.9,ped:1318}}[per];
+ const dias=[3120,2280,1900,2410,3980,4620,4210,3350,2190,2050,2560,4110,4870,4390],lab=['S','T','Q','Q','S','S','D','S','T','Q','Q','S','S','D'];
+ const mx=Math.max(...dias),W=640,H=210,bw=W/dias.length;
+ const bars=`<svg viewBox="0 0 ${W} ${H+24}" class="bars" style="width:100%;height:auto">${[.25,.5,.75,1].map(f=>`<line x1="0" x2="${W}" y1="${H-H*f*.9}" y2="${H-H*f*.9}" stroke="#eef0f3"/>`).join('')}${dias.map((v,i)=>{const h=v/mx*H*.9;return `<rect x="${i*bw+8}" y="${H-h}" width="${bw-16}" height="${h}" rx="5" fill="${v===mx?'#ff5a1f':'#ffc2a8'}"><title>${brl(v)}</title></rect><text x="${i*bw+bw/2}" y="${H+16}" text-anchor="middle">${lab[i]}</text>`}).join('')}</svg>`;
+ const org=[['Cardápio digital',46,'#ff5a1f'],['WhatsApp (IA)',31,'#25d366'],['iFood',17,'#ea1d2c'],['Balcão',6,'#9ca3af']];
+ const C=2*Math.PI*60;let acc=0;
+ const donut=`<svg viewBox="0 0 160 160" width="150" height="150"><g transform="rotate(-90 80 80)">${org.map(([,v,c])=>{const l=C*v/100;const s=`<circle cx="80" cy="80" r="60" fill="none" stroke="${c}" stroke-width="22" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-acc}"/>`;acc+=l;return s}).join('')}</g><text x="80" y="78" text-anchor="middle" font-size="20" font-weight="800">${D.ped}</text><text x="80" y="96" text-anchor="middle" font-size="11" fill="#6b7280">pedidos</text></svg>`;
+ const fun=[['Abriram o cardápio',4820],['Viram um produto',3110],['Colocaram na sacola',1402],['Fizeram o pedido',1023]];
+ const vend={8:240,11:410,4:212,6:188,2:176,1:121,3:98,14:87,9:76};
+ const top6=P.filter(p=>vend[p.id]).map(p=>({p,q:vend[p.id],f:vend[p.id]*p.preco,m:(p.preco-p.custo)/p.preco*100})).sort((a,b)=>b.f-a.f).slice(0,6);
+ return cab('Relatórios','Quanto vendeu, de onde veio e o que dá mais lucro',`<div class="per">${[['hoje','Hoje'],['7','7 dias'],['30','30 dias']].map(([k,l])=>`<button class="btn sm ${per===k?'pri':''}" onclick="S.relPer='${k}';render()">${l}</button>`).join('')}</div>`)
+ +`<div class="grid g4 mb">${kpi('Faturamento',brl(D.fat),'▲ 14% vs. período anterior')}${kpi('Pedidos',D.ped,'▲ 11%')}${kpi('Ticket médio',brl(D.fat/D.ped),'▲ 3%')}${kpi('Comissão que você não pagou',brl(D.fat*.23),'comparado a 23% de marketplace')}</div>
+ <div class="card ia mb"><b>✨ Sugestão da IA</b><p>Terça e quarta vendem metade de sexta e sábado. 87 clientes só pedem no fim de semana — uma campanha de cashback em dobro na quarta para eles pode render cerca de R$ 600 a mais por semana.</p><button class="btn pri sm" onclick="S.mkSeg=2;go('marketing')">Criar essa campanha</button></div>
+ <div class="grid g2x mb"><div class="card"><h3 class="h3">Vendas por dia (últimas 2 semanas)</h3>${bars}</div>
+ <div class="card"><h3 class="h3">De onde vêm os pedidos</h3><div class="row g8 wrap" style="gap:18px">${donut}<div class="leg grow">${org.map(([n,v,c])=>`<div><i style="background:${c}"></i>${n}<b>${v}%</b></div>`).join('')}</div></div></div></div>
+ <div class="grid g2 mb"><div class="card"><h3 class="h3">Funil do cardápio</h3><div class="fun">${fun.map(([n,v])=>`<div><span>${n}</span><i style="width:${v/fun[0][1]*100}%"></i><b>${v.toLocaleString('pt-BR')}</b></div>`).join('')}</div><div class="note">Conversão de ${(fun[3][1]/fun[0][1]*100).toFixed(1).replace('.',',')}% — 379 pessoas montaram a sacola e desistiram. O “recuperador” manda um lembrete no WhatsApp.</div></div>
+ <div class="card"><h3 class="h3">Avaliações <span class="pill ok">⭐ 4,7</span></h3>
+ <div class="fb"><b>⭐⭐⭐⭐⭐</b> “Smash perfeito e chegou quentinho.” <br><small>Gustavo • ontem</small></div>
+ <div class="fb"><b>⭐⭐⭐</b> “Batata chegou meio murcha.” <br><small>Larissa • 2 dias • <span class="warn-t">Sugestão: trocar a embalagem da batata por uma com respiro</span></small></div>
+ <div class="fb"><b>⭐⭐⭐⭐⭐</b> “Atendimento pelo WhatsApp super rápido!” <br><small>Diego • 3 dias</small></div></div></div>
+ <div class="card"><h3 class="h3">Produtos que mais vendem (30 dias)</h3><div class="tw"><table class="tbl"><tr><th>Produto</th><th>Vendidos</th><th>Faturamento</th><th>Margem</th></tr>
+ ${top6.map(x=>`<tr><td><b>${x.p.emoji} ${esc(x.p.nome)}</b></td><td>${x.q}</td><td>${brl(x.f)}</td><td><span class="pill ${x.m>=60?'ok':x.m>=50?'warn':'bad'}">${x.m.toFixed(0)}%</span></td></tr>`).join('')}</table></div></div>`}
+
+render();
+</script>
+</body>
+</html>
